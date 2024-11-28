@@ -4,11 +4,11 @@ body {
 }
 
 .wrapper {
-	@apply rounded-md border bg-white px-4 py-6 drop-shadow-2xl dark:border-surface-500 dark:bg-surface-900;
+	@apply rounded-md border bg-white px-4 py-6 drop-shadow-2xl dark:border-surface-500 dark:bg-surface-950;
 }
 
 .wrapper2 {
-	@apply rounded-md border border-secondary-500 bg-white px-4 py-6 drop-shadow-2xl dark:border-surface-400 dark:bg-surface-900;
+	@apply rounded-md border border-secondary-500 bg-white px-4 py-6 drop-shadow-2xl dark:border-surface-400 dark:bg-surface-950;
 }
 
 /* primary */

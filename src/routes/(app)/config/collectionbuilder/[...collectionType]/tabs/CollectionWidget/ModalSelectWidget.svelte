@@ -95,9 +95,9 @@
 									onFormSubmit();
 								}}
 								aria-label={item}
-								class="variant-outline-warning btn relative flex items-center justify-start gap-1 {selected === item
+								class="preset-outline-warning btn relative flex items-center justify-start gap-1 {selected === item
 									? 'bg-primary-500'
-									: ' variant-outline-warning hover:variant-ghost-warning'}"
+									: ' preset-outline-warning hover:preset-ghost-warning'}"
 							>
 								<iconify-icon icon={widgets[item]?.Icon} width="22" class="mr-1 text-tertiary-500"></iconify-icon>
 								<span class="text-surface-700 dark:text-white">{item}</span>
@@ -111,9 +111,9 @@
 								></iconify-icon>
 							</button>
 							<!-- IconTooltip -->
-							<div class="card variant-filled-secondary z-50 max-w-sm p-4" data-popup={item}>
+							<div class="card z-50 max-w-sm p-4 preset-filled-secondary-500" data-popup={item}>
 								<p>{widgets[item]?.Description}</p>
-								<div class="variant-filled-secondary arrow"></div>
+								<div class="arrow preset-filled-secondary-500"></div>
 							</div>
 						{/if}
 					{/if}
@@ -123,7 +123,7 @@
 
 		<footer class="flex {existingCategory.name ? 'justify-between' : 'justify-end'} {parent.regionFooter}">
 			<div class="flex gap-2">
-				<button class="variant-outline-secondary btn" onclick={parent.onClose}>{m.button_cancel()}</button>
+				<button class="preset-outline-secondary btn" onclick={parent.onClose}>{m.button_cancel()}</button>
 				<!-- <button class="btn {parent.buttonPositive}" on:click={onFormSubmit}>{m.button_save()}</button> -->
 			</div>
 		</footer>

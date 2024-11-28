@@ -31,13 +31,16 @@ It provides the following functionality:
 	import RoleModal from './RoleModal.svelte';
 
 	// Skeleton
-	import { getToastStore, getModalStore, type ModalComponent, type ModalSettings, type PopupSettings, popup } from '@skeletonlabs/skeleton';
+	import { getContext } from 'svelte';
+	import { type ToastContext } from '@skeletonlabs/skeleton-svelte';
 
-	const toastStore = getToastStore();
+	export const toast: ToastContext = getContext('toast');
+
+	import { getModalStore, type ModalComponent, type ModalSettings, type PopupSettings, popup } from '@skeletonlabs/skeleton';
+
 	const modalStore = getModalStore();
 
 	// Svelte DND-actions
-	import { flip } from 'svelte/animate';
 	import { dndzone } from 'svelte-dnd-action';
 	import { createRandomID } from '@utils/utils';
 
@@ -159,17 +162,17 @@ It provides the following functionality:
 	};
 
 	// Show corresponding Toast messages
-	function showToast(message, type) {
-		const backgrounds = {
-			success: 'variant-filled-primary',
-			info: 'variant-filled-tertiary',
-			error: 'variant-filled-error'
+	function showToast(description: string, type: 'success' | 'info' | 'error') {
+		const types: Record<'success' | 'info' | 'error', 'success' | 'error' | 'info'> = {
+			success: 'success',
+			info: 'info',
+			error: 'error'
 		};
-		toastStore.trigger({
-			message: message,
-			background: backgrounds[type],
-			timeout: 3000,
-			classes: 'border-1 !rounded-md'
+		toast.create({
+			title: type.charAt(0).toUpperCase() + type.slice(1),
+			description,
+			type: types[type],
+			duration: 3000
 		});
 	}
 
@@ -220,7 +223,7 @@ It provides the following functionality:
 		}
 	}
 
-	function handleFinalize(e) {
+	function handleFinalize(e: { detail: { items: any[]; info: { id: number } } }) {
 		items = [...e.detail.items];
 		roles.set(items);
 		modifiedRoles.add(e.detail.items[e.detail.info.id]._id);
@@ -258,9 +261,9 @@ It provides the following functionality:
 	<div class="wrapper my-4">
 		<div class="mb-4 flex items-center justify-between">
 			<!-- Create -->
-			<button onclick={() => openModal(null, '')} class="variant-filled-primary btn">Create Role</button>
+			<button onclick={() => openModal(null, '')} class="btn preset-filled-primary-500">Create Role</button>
 			<!-- Delete -->
-			<button onclick={deleteSelectedRoles} class="variant-filled-error btn" disabled={$selectedRoles.size === 0}>
+			<button onclick={deleteSelectedRoles} class="btn preset-filled-error-500" disabled={$selectedRoles.size === 0}>
 				Delete Roles ({$selectedRoles.size})
 			</button>
 		</div>
@@ -297,7 +300,7 @@ It provides the following functionality:
 												class="ml-1 text-tertiary-500 dark:text-primary-500"
 												use:popup={getPopupSettings(role._id)}
 											></iconify-icon>
-											<div class="card variant-filled-surface p-4" data-popup="role-{role._id}">
+											<div class="card p-4 preset-filled-surface-500" data-popup="role-{role._id}">
 												{role.description}
 												<div class="arrow"></div>
 											</div>
@@ -311,7 +314,7 @@ It provides the following functionality:
 								</p>
 
 								<!-- Edit Button: changes layout depending on screen size -->
-								<button onclick={() => openModal(role)} aria-label="Edit role" class="variant-filled-secondary btn">
+								<button onclick={() => openModal(role)} aria-label="Edit role" class="btn preset-filled-secondary-500">
 									<iconify-icon icon="mdi:pencil" class="text-white" width="18"></iconify-icon>
 									<span class="hidden md:block">Edit</span>
 								</button>

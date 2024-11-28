@@ -364,7 +364,7 @@
 						>
 							{#each displayTableHeaders as header (header.id)}
 								<button
-									class="chip {header.visible ? 'variant-filled-secondary' : 'variant-ghost-secondary'} w-100 mr-2 flex items-center justify-center"
+									class="chip {header.visible ? 'preset-filled-secondary-500' : 'preset-ghost-secondary'} w-100 mr-2 flex items-center justify-center"
 									animate:flip={{ duration: flipDurationMs }}
 									onclick={() => {
 										displayTableHeaders = displayTableHeaders.map((h) => {
@@ -389,7 +389,7 @@
 
 			<div class="table-container max-h-[calc(100vh-120px)] overflow-auto">
 				<table
-					class="table table-interactive table-hover {density === 'compact' ? 'table-compact' : density === 'normal' ? '' : 'table-comfortable'}"
+					class="table-interactive table-hover table {density === 'compact' ? 'table-compact' : density === 'normal' ? '' : 'table-comfortable'}"
 				>
 					<thead class="text-tertiary-500 dark:text-primary-500">
 						{#if filterShow}
@@ -401,7 +401,7 @@
 												filters = {};
 											}}
 											aria-label="Clear All Filters"
-											class="variant-outline btn-icon"
+											class="preset-outline btn-icon"
 										>
 											<iconify-icon icon="material-symbols:close" width="24"></iconify-icon>
 										</button>
@@ -510,7 +510,7 @@
 				/>
 			</div>
 		{:else}
-			<div class="variant-ghost-error btn text-center font-bold">
+			<div class="preset-ghost-error btn text-center font-bold">
 				{#if showUserList}
 					{m.adminarea_nouser()}
 				{:else if showUsertoken}

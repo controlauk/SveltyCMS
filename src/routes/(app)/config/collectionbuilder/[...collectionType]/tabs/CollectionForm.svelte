@@ -190,12 +190,12 @@ Features:
 		</div>
 
 		<!-- Tooltip -->
-		<div class="card variant-filled z-50 max-w-sm" data-popup="Name">
+		<div class="card z-50 max-w-sm preset-filled" data-popup="Name">
 			<!-- Popup Tooltip with the arrow element -->
-			<div class="card variant-filled z-50 max-w-sm p-2" data-popup="Name">
+			<div class="card z-50 max-w-sm p-2 preset-filled" data-popup="Name">
 				<p>{m.collection_name_tooltip1()}</p>
 				<p>{m.collection_name_tooltip2()}</p>
-				<div class="variant-filled arrow"></div>
+				<div class="arrow preset-filled"></div>
 			</div>
 		</div>
 	</div>
@@ -213,9 +213,9 @@ Features:
 		</label>
 
 		<!-- Popup Tooltip with the arrow element -->
-		<div class="card variant-filled z-50 max-w-sm p-2" data-popup="Icon">
+		<div class="card z-50 max-w-sm p-2 preset-filled" data-popup="Icon">
 			<p>{m.collection_icon_tooltip()}</p>
-			<div class="variant-filled arrow"></div>
+			<div class="arrow preset-filled"></div>
 		</div>
 
 		<IconifyPicker bind:iconselected={selectedIcon} bind:searchQuery />
@@ -230,9 +230,9 @@ Features:
 		</label>
 
 		<!-- Popup Tooltip with the arrow element -->
-		<div class="card variant-filled z-50 max-w-sm p-2" data-popup="Slug">
+		<div class="card z-50 max-w-sm p-2 preset-filled" data-popup="Slug">
 			<p>{m.collection_slug_tooltip()}</p>
-			<div class="variant-filled arrow"></div>
+			<div class="arrow preset-filled"></div>
 		</div>
 
 		<input
@@ -253,9 +253,9 @@ Features:
 		</label>
 
 		<!-- Popup Tooltip with the arrow element -->
-		<div class="card variant-filled z-50 max-w-sm p-2" data-popup="Description">
+		<div class="card z-50 max-w-sm p-2 preset-filled" data-popup="Description">
 			<p>{m.collection_description()}</p>
-			<div class="variant-filled arrow"></div>
+			<div class="arrow preset-filled"></div>
 		</div>
 
 		<textarea
@@ -277,9 +277,9 @@ Features:
 		</label>
 
 		<!-- Popup Tooltip with the arrow element -->
-		<div class="card variant-filled z-50 max-w-sm p-2" data-popup="Status">
+		<div class="card z-50 max-w-sm p-2 preset-filled" data-popup="Status">
 			<p>{m.collection_status_tooltip()}</p>
-			<div class="variant-filled arrow"></div>
+			<div class="arrow preset-filled"></div>
 		</div>
 
 		<select id="status" bind:value={collectionValue.value.status} class="input text-black dark:text-primary-500">
@@ -292,6 +292,7 @@ Features:
 
 <!-- Buttons Cancel & Next-->
 <div class="mt-2 flex justify-between">
-	<a href="/config/collectionbuilder" class="variant-filled-secondary btn mt-2">{m.button_cancel()}</a>
-	<button type="button" onclick={handleNextClick} class="variant-filled-tertiary btn mt-2 dark:variant-filled-primary">{m.button_next()}</button>
+	<a href="/config/collectionbuilder" class="btn mt-2 preset-filled-secondary-500">{m.button_cancel()}</a>
+	<button type="button" onclick={handleNextClick} class="btn mt-2 preset-filled-tertiary-500 dark:preset-filled-primary-500">{m.button_next()}</button
+	>
 </div>

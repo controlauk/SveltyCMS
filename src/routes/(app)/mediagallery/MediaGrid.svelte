@@ -76,7 +76,7 @@ Key features:
 						<iconify-icon icon="raphael:info" width="24" class="text-tertiary-500 dark:text-primary-500"></iconify-icon>
 					</button>
 
-					<div class="card variant-filled z-50 min-w-[250px] p-2" data-popup="FileInfo">
+					<div class="card z-50 min-w-[250px] p-2 preset-filled" data-popup="FileInfo">
 						<table class="table-hover w-full table-auto">
 							<thead class="text-tertiary-500">
 								<tr class="divide-x divide-surface-400 border-b-2 border-surface-400 text-center">

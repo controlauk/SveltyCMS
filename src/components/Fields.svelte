@@ -106,7 +106,6 @@ Key features:
 	}
 
 	let filteredFields = $derived(filterFieldsByPermission(derivedFields, user.role));
-
 </script>
 
 {#if isLoading}
@@ -116,8 +115,8 @@ Key features:
 		justify="{collection.value?.revision === true ? 'justify-between md:justify-around' : 'justify-center '} items-center"
 		rounded="rounded-tl-container-token rounded-tr-container-token"
 		flex="flex-1 items-center"
-		active="border-b border-tertiary-500 dark:border-primary-500 variant-soft-secondary"
-		hover="hover:variant-soft-secondary"
+		active="border-b border-tertiary-500 dark:border-primary-500 preset-soft-secondary"
+		hover="hover:preset-soft-secondary"
 		regionList={getTabHeaderVisibility() ? 'hidden' : ''}
 		value={tabValue}
 	>
@@ -136,7 +135,7 @@ Key features:
 				{#snippet lead()}
 					<div class="flex items-center gap-1">
 						<iconify-icon icon="pepicons-pop:countdown" width="24" class="text-tertiary-500 dark:text-primary-500"></iconify-icon>
-						<p>Ver. <span class="variant-outline-tertiary badge rounded-full dark:variant-outline-primary">1</span></p>
+						<p>Ver. <span class="preset-outline-tertiary dark:preset-outline-primary badge rounded-full">1</span></p>
 					</div>
 				{/snippet}
 			</Tab>
@@ -168,7 +167,7 @@ Key features:
 		{#snippet panel()}
 			{#if tabSet === 0}
 				<div class="mb-2 text-center text-xs text-error-500">{m.fields_required()}</div>
-				<div class="rounded-md border bg-white px-4 py-6 drop-shadow-2xl dark:border-surface-500 dark:bg-surface-900">
+				<div class="rounded-md border bg-white px-4 py-6 drop-shadow-2xl dark:border-surface-500 dark:bg-surface-950">
 					<div class="flex flex-wrap items-center justify-center gap-1 overflow-auto">
 						{#each filteredFields as field (field.db_fieldName || field.id || field.label || field.name)}
 							{#if field.widget}
@@ -229,7 +228,7 @@ Key features:
 				<!-- Revision tab content -->
 				<div class="mb-2 flex items-center justify-between gap-2">
 					<p class="text-center text-tertiary-500 dark:text-primary-500">{m.fields_revision_compare()}</p>
-					<button class="variant-outline-tertiary btn dark:variant-ghost-primary" onclick={handleRevert}>{m.fields_revision_revert()}</button>
+					<button class="preset-outline-tertiary dark:preset-ghost-primary btn" onclick={handleRevert}>{m.fields_revision_revert()}</button>
 				</div>
 				<select class="select mb-2">
 					<option value="1">{m.fields_revision_most_recent()}</option>
@@ -270,14 +269,14 @@ Key features:
 				<!-- Live Preview tab content -->
 				<div class="wrapper">
 					<h2 class="mb-4 text-center text-xl font-bold text-tertiary-500 dark:text-primary-500">Live Preview</h2>
-					<div class="card variant-glass-secondary mb-4 p-1 sm:p-4">
+					<div class="preset-glass-secondary card mb-4 p-1 sm:p-4">
 						{@html getLivePreviewContent()}
 					</div>
 				</div>
 			{:else if tabSet === 3}
 				<!-- API Json tab content -->
 				{#if collectionValue.value == null}
-					<div class="variant-ghost-error mb-4 py-2 text-center font-bold">{m.fields_api_nodata()}</div>
+					<div class="preset-ghost-error mb-4 py-2 text-center font-bold">{m.fields_api_nodata()}</div>
 				{:else}
 					<div class="wrapper relative z-0 mb-4 flex w-full items-center justify-start gap-1">
 						<p class="flex items-center">

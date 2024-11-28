@@ -120,9 +120,9 @@
 							</span>
 
 							<!-- Popup Tooltip with the arrow element -->
-							<div class="card variant-filled z-50 max-w-sm p-2" data-popup={`popup${key}`}>
+							<div class="card z-50 max-w-sm p-2 preset-filled" data-popup={`popup${key}`}>
 								{helper}
-								<div class="variant-filled arrow"></div>
+								<div class="arrow preset-filled"></div>
 							</div>
 						</label>
 
@@ -149,8 +149,8 @@
 				{/each}
 			</form>
 			<div class="bg-surface-100-800-token sticky bottom-0 z-10 m-2 flex w-full justify-between py-2">
-				<button type="button" class="variant-filled btn" onclick={parent.onClose}>{m.button_cancel()}</button>
-				<button type="submit" class="variant-filled btn">{m.button_save()}</button>
+				<button type="button" class="btn preset-filled" onclick={parent.onClose}>{m.button_cancel()}</button>
+				<button type="submit" class="btn preset-filled">{m.button_save()}</button>
 			</div>
 		</div>
 	</div>

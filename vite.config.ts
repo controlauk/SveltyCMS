@@ -146,7 +146,6 @@ export default defineConfig({
 				return {
 					define: {
 						'import.meta.env.root': JSON.stringify(Path.posix.join('/', __dirname.replace(parsed.root, ''))),
-						// 'import.meta.env.systemCollectionsPath': JSON.stringify(Path.join(__dirname, 'src/collections')),
 						'import.meta.env.userCollectionsPath': JSON.stringify(userCollections),
 						'import.meta.env.compiledCollectionsPath': JSON.stringify(compiledCollections)
 					}

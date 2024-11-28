@@ -16,15 +16,26 @@
 	import * as m from '@src/paraglide/messages';
 
 	// Skeleton
-	import { getToastStore, getModalStore } from '@skeletonlabs/skeleton';
-	import { Avatar } from '@skeletonlabs/skeleton';
-	import { FileDropzone } from '@skeletonlabs/skeleton';
-	import type { ModalComponent } from '@skeletonlabs/skeleton';
+	import type { ModalComponent, ModalSettings } from '@skeletonlabs/skeleton';
+	import { getContext } from 'svelte';
+	import { type ToastContext } from '@skeletonlabs/skeleton-svelte';
 
-	const toastStore = getToastStore();
-	const modalStore = getModalStore();
+	export const toast: ToastContext = getContext('toast');
 
-	let files: FileList | null = $state(null);
+	// Show corresponding Toast messages
+	function showToast(description: string, type: 'success' | 'info' | 'error') {
+		const types: Record<'success' | 'info' | 'error', 'success' | 'error' | 'info'> = {
+			success: 'success',
+			info: 'info',
+			error: 'error'
+		};
+		toast.create({
+			title: type.charAt(0).toUpperCase() + type.slice(1),
+			description,
+			type: types[type],
+			duration: 3000
+		});
+	}
 
 	// Valibot validation schema
 	import { object, instance, check, pipe, parse, type InferInput, type ValiError } from 'valibot';
@@ -68,7 +79,7 @@
 		const inputFiles = (e.target as HTMLInputElement).files;
 		if (!inputFiles || inputFiles.length === 0) return;
 
-		files = inputFiles;
+		const files = inputFiles;
 		const lastFile = files[files.length - 1];
 		console.log('Selected file:', lastFile);
 
@@ -83,6 +94,7 @@
 
 	// Handle form submit
 	async function onFormSubmit(): Promise<void> {
+		const files = (e.target as HTMLInputElement).files;
 		if (!files || files.length === 0) return;
 
 		const file = files[0];
@@ -114,21 +126,13 @@
 
 			if (response.status === 200) {
 				avatarSrc.set(response.data.avatarUrl);
-				toastStore.trigger({
-					message: 'Avatar updated successfully!',
-					background: 'gradient-primary',
-					timeout: 3000
-				});
+				showToast('Avatar updated successfully!', 'success');
 				modalStore.close();
 				await invalidateAll();
 			}
 		} catch (error) {
 			console.error('Error uploading avatar:', error);
-			toastStore.trigger({
-				message: 'Failed to update avatar',
-				background: 'gradient-error',
-				timeout: 3000
-			});
+			showToast('Failed to update avatar', 'error');
 		}
 	}
 
@@ -140,24 +144,14 @@
 			if (response.status === 200) {
 				avatarSrc.set('/Default_User.svg');
 
-				toastStore.trigger({
-					message: '<iconify-icon icon="radix-icons:avatar" color="white" width="24" class="mr-1"></iconify-icon> Avatar Deleted',
-					background: 'gradient-error',
-					timeout: 3000,
-					classes: 'border-1 !rounded-md'
-				});
+				showToast('Avatar Deleted', 'info');
 
 				modalStore.close();
 				await invalidateAll(); // Reload the page data to get the updated user object
 			}
 		} catch (error) {
 			console.error('Error deleting avatar:', error);
-			toastStore.trigger({
-				message: '<iconify-icon icon="radix-icons:cross-2" color="white" width="24" class="mr-1"></iconify-icon> Failed to delete avatar',
-				background: 'gradient-error',
-				timeout: 3000,
-				classes: 'border-1 !rounded-md'
-			});
+			showToast('Failed to delete avatar', 'error');
 		}
 	}
 
@@ -215,7 +209,7 @@
 		<footer class="modal-footer {parent.regionFooter} justify-between">
 			<!-- Delete Avatar -->
 			{#if $avatarSrc !== '/Default_User.svg'}
-				<button type="button" onclick={deleteAvatar} class="variant-filled-error btn">
+				<button type="button" onclick={deleteAvatar} class="btn preset-filled-error-500">
 					<iconify-icon icon="icomoon-free:bin" width="24"></iconify-icon>
 					<span class="hidden sm:block">{m.button_delete()}</span>
 				</button>
@@ -225,11 +219,11 @@
 			{/if}
 			<div class="flex justify-between gap-2">
 				<!-- Cancel -->
-				<button class="variant-outline-secondary btn" onclick={parent.onClose}>
+				<button class="preset-outline-secondary btn" onclick={parent.onClose}>
 					{m.button_cancel()}
 				</button>
 				<!-- Save -->
-				<button class="variant-filled-tertiary btn btn dark:variant-filled-primary {parent.buttonPositive}" onclick={onFormSubmit}
+				<button class="btn btn preset-filled-tertiary-500 dark:preset-filled-primary-500 {parent.buttonPositive}" onclick={onFormSubmit}
 					>{m.button_save()}
 				</button>
 			</div>

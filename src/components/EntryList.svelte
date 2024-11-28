@@ -52,10 +52,11 @@ Features:
 	import Loading from './Loading.svelte';
 
 	// Skeleton
-	import { getToastStore, getModalStore } from '@skeletonlabs/skeleton';
-	import type { ModalSettings } from '@skeletonlabs/skeleton';
-	const toastStore = getToastStore();
-	const modalStore = getModalStore();
+	import { getContext } from 'svelte';
+	import { type ToastContext } from '@skeletonlabs/skeleton-svelte';
+
+	// Get toast and modal context
+	export const toast: ToastContext = getContext('toast');
 
 	// Svelte-dnd-action
 	import { flip } from 'svelte/animate';
@@ -388,12 +389,11 @@ Features:
 					case 'cloned':
 					case 'scheduled':
 						// Trigger a toast message indicating that the feature is not yet implemented
-						const toast = {
-							message: 'Feature not yet implemented.',
-							background: 'variant-filled-error',
-							timeout: 3000
-						};
-						toastStore.trigger(toast);
+						toast.create({
+							description: 'Feature not yet implemented.',
+							type: 'error',
+							duration: 3000
+						});
 						break;
 				}
 
@@ -619,7 +619,7 @@ Features:
 					>
 						{#each displayTableHeaders as header (header.id)}
 							<button
-								class="chip {header.visible ? 'variant-filled-secondary' : 'variant-ghost-secondary'} w-100 mr-2 flex items-center justify-center"
+								class="chip {header.visible ? 'preset-filled-secondary-500' : 'variant-ghost-secondary'} w-100 mr-2 flex items-center justify-center"
 								animate:flip={{ duration: flipDurationMs }}
 								onclick={() => {
 									// Toggle the visibility of the header
@@ -644,7 +644,7 @@ Features:
 		{/if}
 
 		<div class="table-container max-h-[calc(100dvh-120px)] overflow-auto">
-			<table class="table table-interactive table-hover {density === 'compact' ? 'table-compact' : density === 'normal' ? '' : 'table-comfortable'}">
+			<table class="table-interactive table-hover table {density === 'compact' ? 'table-compact' : density === 'normal' ? '' : 'table-comfortable'}">
 				<!-- Table Header -->
 				<thead class="text-tertiary-500 dark:text-primary-500">
 					{#if filterShow}

@@ -168,7 +168,7 @@ Features:
 
 {#if $isSearchVisible}
 	<div
-		class="search-component fixed inset-0 z-50 flex flex-col items-center justify-center bg-gray-900/50 backdrop-blur-sm"
+		class="search-component fixed inset-0 z-50 flex flex-col items-center justify-center bg-gray-950/50 backdrop-blur-sm"
 		role="dialog"
 		aria-label="Global Search"
 	>
@@ -188,7 +188,7 @@ Features:
 		<!-- Search results -->
 		<ul
 			id="search-results"
-			class="mt-1 grid w-full max-w-xl overflow-auto rounded px-2 py-1 leading-loose bg-surface-active-token"
+			class="bg-surface-active-token mt-1 grid w-full max-w-xl overflow-auto rounded px-2 py-1 leading-loose"
 			role="listbox"
 			aria-label="Search results"
 		>

@@ -302,7 +302,7 @@
 				type="button"
 				onclick={() => toggleSidebar('left', $screenSize === 'lg' ? 'full' : 'collapsed')}
 				aria-label="Toggle Sidebar"
-				class="variant-ghost-surface btn-icon mt-1"
+				class="preset-ghost-surface btn-icon mt-1"
 			>
 				<iconify-icon icon="mingcute:menu-fill" width="24"></iconify-icon>
 			</button>
@@ -334,7 +334,7 @@
 		{#if $screenSize !== 'lg'}
 			{#if showMore}
 				<!-- Next Button  -->
-				<button type="button" onclick={next} aria-label="Next" class="variant-filled-tertiary btn-icon dark:variant-filled-primary md:btn">
+				<button type="button" onclick={next} aria-label="Next" class="btn-icon preset-filled-tertiary-500 md:btn dark:preset-filled-primary-500">
 					<iconify-icon icon="carbon:next-filled" width="24" class="text-white"></iconify-icon>
 					<span class="hidden md:block">{m.button_next()}</span>
 				</button>
@@ -350,7 +350,7 @@
 						type="button"
 						onclick={saveData}
 						disabled={collection.value?.permissions?.[user.role]?.write === false}
-						class="variant-filled-tertiary btn-icon dark:variant-filled-primary md:hidden"
+						class="btn-icon preset-filled-tertiary-500 dark:preset-filled-primary-500 md:hidden"
 						aria-label="Save entry"
 					>
 						<iconify-icon icon="material-symbols:save" width="24" class="text-white"></iconify-icon>
@@ -358,7 +358,7 @@
 				{/if}
 
 				<!-- DropDown to show more Buttons -->
-				<button type="button" onclick={() => (showMore = !showMore)} aria-label="Show more" class="variant-ghost-surface btn-icon">
+				<button type="button" onclick={() => (showMore = !showMore)} aria-label="Show more" class="preset-ghost-surface btn-icon">
 					<iconify-icon icon="material-symbols:filter-list-rounded" width="30"></iconify-icon>
 				</button>
 			{/if}
@@ -371,11 +371,11 @@
 
 		<!-- Cancel/Reload -->
 		{#if !$headerActionButton}
-			<button type="button" onclick={handleCancel} aria-label="Cancel" class="variant-ghost-surface btn-icon">
+			<button type="button" onclick={handleCancel} aria-label="Cancel" class="preset-ghost-surface btn-icon">
 				<iconify-icon icon="material-symbols:close" width="24"></iconify-icon>
 			</button>
 		{:else}
-			<button type="button" onclick={handleReload} aria-label="Reload" class="variant-ghost-surface btn-icon">
+			<button type="button" onclick={handleReload} aria-label="Reload" class="preset-ghost-surface btn-icon">
 				<iconify-icon icon="fa:refresh" width="24" class="text-tertiary-500 dark:text-primary-500"></iconify-icon>
 			</button>
 		{/if}
@@ -461,7 +461,7 @@
 				<input
 					type="datetime-local"
 					bind:value={createdAtDate}
-					class="variant-filled-surface w-full p-2 text-left text-sm"
+					class="w-full p-2 text-left text-sm preset-filled-surface-500"
 					aria-label="Set creation date"
 				/>
 			</div>

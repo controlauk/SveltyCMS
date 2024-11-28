@@ -42,11 +42,11 @@ Features:
 </script>
 
 <div class="modal-body p-4">
-	<div class="alert variant-filled-warning mb-4">
+	<div class="alert mb-4 preset-filled-warning-500">
 		<div class="alert-message">
 			<h3 class="h3">Collection Name Conflict</h3>
 			<p>The collection name "{conflictingName}" already exists at:</p>
-			<code class="mt-2 block rounded bg-surface-900 p-2">{conflictPath}</code>
+			<code class="mt-2 block rounded bg-surface-950 p-2">{conflictPath}</code>
 		</div>
 	</div>
 
@@ -67,7 +67,15 @@ Features:
 		</label>
 		<div class="input-group">
 			<input id="use-custom" type="checkbox" bind:checked={useCustomName} class="checkbox" />
-			<input id="custom-name" type="text" bind:value={customName} disabled={!useCustomName} class="input" placeholder="Enter custom name" aria-labelledby="use-custom" />
+			<input
+				id="custom-name"
+				type="text"
+				bind:value={customName}
+				disabled={!useCustomName}
+				class="input"
+				placeholder="Enter custom name"
+				aria-labelledby="use-custom"
+			/>
 		</div>
 		{#if useCustomName && customName && !validateCustomName(customName)}
 			<p class="mt-1 text-sm text-error-500">Name must start with a letter and contain only letters and numbers</p>
@@ -75,10 +83,10 @@ Features:
 	</div>
 
 	<footer class="modal-footer flex justify-end gap-4">
-		<button type="button" class="variant-ghost btn" onclick={handleCancel}> Cancel </button>
+		<button type="button" class="preset-ghost btn" onclick={handleCancel}> Cancel </button>
 		<button
 			type="button"
-			class="variant-filled-primary btn"
+			class="btn preset-filled-primary-500"
 			onclick={handleConfirm}
 			disabled={useCustomName ? !validateCustomName(customName) : !selectedName}
 		>

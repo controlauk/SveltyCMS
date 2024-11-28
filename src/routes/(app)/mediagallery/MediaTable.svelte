@@ -103,7 +103,7 @@ Key features:
 </div>
 
 <div class="table-container max-h-[calc(100vh-120px)] overflow-auto">
-	<table class="table table-interactive table-hover">
+	<table class="table-interactive table-hover table">
 		<thead class="bg-surface-100-800-token sticky top-0 text-tertiary-500 dark:text-primary-500">
 			<tr class="divide-x divide-surface-400 border-b border-black dark:border-white">
 				<th class="w-10">Select</th>
@@ -139,7 +139,7 @@ Key features:
 					<td>{file.type || 'Unknown'}</td>
 					<td>{file.path}</td>
 					<td>
-						<button onclick={() => handleDelete(file)} class="variant-filled-primary btn btn-sm" aria-label="Delete"> Delete </button>
+						<button onclick={() => handleDelete(file)} class="btn btn-sm preset-filled-primary-500" aria-label="Delete"> Delete </button>
 					</td>
 				</tr>
 			{/each}

@@ -34,8 +34,10 @@ Features:
 	import PasswordStrength from '@components/PasswordStrength.svelte';
 
 	// Skeleton
-	import { Toast, getToastStore } from '@skeletonlabs/skeleton';
-	const toastStore = getToastStore();
+	import { getContext } from 'svelte';
+	import { type ToastContext } from '@skeletonlabs/skeleton-svelte';
+
+	export const toast: ToastContext = getContext('toast');
 
 	// ParaglideJS
 	import * as m from '@src/paraglide/messages';
@@ -123,13 +125,11 @@ Features:
 		onResult: ({ result, cancel }) => {
 			if (result.type === 'redirect') {
 				// Trigger the toast
-				toastStore.trigger({
-					message: m.signin_signinsuccess(),
-					// Provide any utility or variant background style:
-					background: 'variant-filled-primary',
-					timeout: 4000,
-					// Add your custom classes here:
-					classes: 'border-1 !rounded-md'
+				toast.create({
+					description: m.signin_signinsuccess(),
+					type: 'success',
+
+					duration: 4000
 				});
 
 				return;
@@ -184,13 +184,10 @@ Features:
 				});
 
 				// Trigger the toast
-				toastStore.trigger({
-					message: errorMessages,
-					// Provide any utility or variant background style:
-					background: 'variant-filled-primary',
-					timeout: 4000,
-					// Add your custom classes here:
-					classes: 'border-1 !rounded-md'
+				toast.create({
+					description: errorMessages,
+					type: 'error',
+					duration: 4000
 				});
 
 				return;
@@ -206,11 +203,12 @@ Features:
 					return;
 				} else {
 					PWreset = true;
-					toastStore.trigger({
-						message: m.signin_forgottontoast(),
-						background: 'variant-filled-primary',
-						timeout: 4000,
-						classes: 'border-1 !rounded-md'
+
+					// Trigger the toast
+					toast.create({
+						description: m.signin_forgottontoast(),
+						type: 'error',
+						duration: 4000
 					});
 
 					return;
@@ -254,13 +252,10 @@ Features:
 
 			if (result.type === 'success' || result.type === 'redirect') {
 				// Trigger the Reset toast
-				toastStore.trigger({
-					message: m.signin_restpasswordtoast(),
-					// Provide any utility or variant background style:
-					background: 'variant-filled-primary',
-					timeout: result.type === 'redirect' ? 3000 : 4000,
-					// Add your custom classes here:
-					classes: 'border-1 !rounded-md'
+				toast.create({
+					description: m.signin_restpasswordtoast(),
+					type: 'success',
+					duration: result.type === 'redirect' ? 3000 : 4000
 				});
 
 				if (result.type === 'redirect') return;
@@ -317,8 +312,6 @@ Features:
 	const baseClasses = 'hover relative flex items-center';
 </script>
 
-<Toast />
-
 <section
 	onclick={handleFormClick}
 	onkeydown={(e) => e.key === 'Enter' && onClick?.()}
@@ -354,7 +347,7 @@ Features:
 			<div class="-mt-2 flex items-center justify-end gap-2 text-right text-xs text-error-500">
 				{m.form_required()}
 
-				<button onclick={handleBack} aria-label="Back" class="variant-outline-secondary btn-icon">
+				<button onclick={handleBack} aria-label="Back" class="preset-outline-secondary btn-icon">
 					<iconify-icon icon="ri:arrow-right-line" width="20" class="text-black"></iconify-icon>
 				</button>
 			</div>
@@ -398,14 +391,14 @@ Features:
 						<div class="mt-4 flex flex-col items-center gap-2 sm:flex-row sm:justify-between">
 							<!-- Row 1 -->
 							<div class="flex w-full justify-between gap-2 sm:w-auto">
-								<button type="submit" class="variant-filled-surface btn w-full sm:w-auto" aria-label={m.form_signin()}>
+								<button type="submit" class="btn w-full preset-filled-surface-500 sm:w-auto" aria-label={m.form_signin()}>
 									{m.form_signin()}
 									<!-- Loading indicators -->
 									{#if $delayed}<img src="/Spinner.svg" alt="Loading.." class="ml-4 h-6" />{/if}
 								</button>
 
 								{#if privateEnv.USE_GOOGLE_OAUTH === true}
-									<button type="button" onclick={handleOAuth} aria-label="OAuth" class="variant-filled-surface btn w-full sm:w-auto">
+									<button type="button" onclick={handleOAuth} aria-label="OAuth" class="btn w-full preset-filled-surface-500 sm:w-auto">
 										<iconify-icon icon="flat-color-icons:google" color="white" width="20" class="mt-1"></iconify-icon>
 										<p>OAuth</p>
 									</button>
@@ -416,7 +409,7 @@ Features:
 							<div class="mt-4 flex w-full justify-between sm:mt-0 sm:w-auto">
 								<button
 									type="button"
-									class="variant-ringed-surface btn w-full text-black sm:w-auto"
+									class=" btn w-full text-black preset-outlined-surface-500 sm:w-auto"
 									aria-label={m.signin_forgottenpassword()}
 									tabindex={forgotPasswordTabIndex}
 									onclick={handleForgotPassword}
@@ -464,7 +457,7 @@ Features:
 						{/if}
 
 						<div class="mt-4 flex items-center justify-between">
-							<button type="submit" class="variant-filled-surface btn" aria-label={m.form_resetpassword()}>
+							<button type="submit" class="btn preset-filled-surface-500" aria-label={m.form_resetpassword()}>
 								{m.form_resetpassword()}
 							</button>
 
@@ -476,7 +469,7 @@ Features:
 							<!-- Back button  -->
 							<button
 								type="button"
-								class="variant-filled-surface btn-icon"
+								class="btn-icon preset-filled"
 								aria-label="Back"
 								onclick={() => {
 									PWforgot = false;
@@ -568,7 +561,7 @@ Features:
 						<input type="email" name="email" bind:value={$resetForm.email} hidden />
 
 						<div class="mt-4 flex items-center justify-between">
-							<button type="submit" aria-label={m.signin_savenewpassword()} class="variant-filled-surface btn ml-2 mt-6">
+							<button type="submit" aria-label={m.signin_savenewpassword()} class="btn ml-2 mt-6 preset-filled-surface-500">
 								{m.signin_savenewpassword()}
 								<!-- Loading indicators -->
 								{#if $resetDelayed}
@@ -580,7 +573,7 @@ Features:
 							<button
 								type="button"
 								aria-label={m.button_back()}
-								class="variant-filled-surface btn-icon"
+								class="btn-icon preset-filled-surface-500"
 								onclick={() => {
 									PWforgot = false;
 									PWreset = false;
@@ -592,7 +585,7 @@ Features:
 					</form>
 				{/if}
 			{:else}
-				<button onclick={onClick} type="button" aria-label="Signup" class="variant-ghost btn mt-2 w-full flex-col justify-center text-surface-500">
+				<button onclick={onClick} type="button" aria-label="Signup" class="preset-ghost btn mt-2 w-full flex-col justify-center text-surface-500">
 					<p class="font-bold text-error-500">No users exist yet.</p>
 					<p>Please sign up to create the <span class="font-bold text-tertiary-500">first admin </span> account.</p>
 				</button>

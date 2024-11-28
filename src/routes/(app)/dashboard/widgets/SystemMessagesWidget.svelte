@@ -60,7 +60,7 @@ Features:
 </script>
 
 <div id="systemMessagesWidget" class="relative rounded-lg bg-white p-4 shadow-md dark:bg-gray-800">
-	<h3 class="mb-2 text-lg font-bold">{label} <span class="variant-filled badge">Alert</span></h3>
+	<h3 class="mb-2 text-lg font-bold">{label} <span class="badge preset-filled">Alert</span></h3>
 	{#if messages.length > 0}
 		<ul>
 			{#each messages as message}

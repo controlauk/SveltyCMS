@@ -192,7 +192,7 @@ Features:
 			<div class="-mt-2 flex items-center justify-end gap-2 text-right text-xs text-error-500">
 				{m.form_required()}
 
-				<button onclick={handleBack} aria-label="Back" class="variant-outline-secondary btn-icon">
+				<button onclick={handleBack} aria-label="Back" class="preset-outline-secondary btn-icon">
 					<iconify-icon icon="ri:arrow-left-line" width="20" class="text-white"></iconify-icon>
 				</button>
 			</div>
@@ -316,15 +316,15 @@ Features:
 
 				{#if !privateEnv.USE_GOOGLE_OAUTH}
 					<!-- Email SignIn only -->
-					<button type="submit" class="variant-filled btn mt-4 uppercase" aria-label={m.form_signup()}>
+					<button type="submit" class="preset-tone-surface-500 btn mt-4 uppercase" aria-label={m.form_signup()}>
 						{m.form_signup()}
 						{#if $delayed}<img src="/Spinner.svg" alt="Loading.." class="ml-4 h-6" />{/if}
 					</button>
 
 					<!-- Email + OAuth signin  -->
 				{:else}
-					<div class="btn-group mt-4 border border-secondary-500 text-white [&>*+*]:border-secondary-500">
-						<button type="submit" class="btn w-3/4 rounded-none bg-surface-200 text-black hover:text-white" aria-label={m.form_signup()}>
+					<div class="btn-group mt-4 border border-surface-200 p-0 preset-filled-surface-200-800">
+						<button type="submit" class="btn m-0 w-3/4 rounded-none bg-surface-200 text-black hover:text-white" aria-label={m.form_signup()}>
 							<span class="w-full text-black hover:text-white">{m.form_signup()}</span>
 							<!-- Loading indicators -->
 							{#if $delayed}<img src="/Spinner.svg" alt="Loading.." class="ml-4 h-6" />{/if}

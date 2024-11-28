@@ -90,7 +90,7 @@
 </div>
 
 <!-- Pagination controls -->
-<nav class="variant-outline btn-group" aria-label="Table pagination">
+<nav class="preset-outline btn-group" aria-label="Table pagination">
 	<!-- First page button -->
 	<button
 		onclick={() => goToPage(1)}

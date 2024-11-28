@@ -124,7 +124,7 @@ It handles widget configuration, permissions, and specific options.
 
 		<footer class="{parent.regionFooter} justify-between">
 			<!-- Delete Button -->
-			<button type="button" onclick={deleteWidget} aria-label="Delete" class="variant-filled-error btn">
+			<button type="button" onclick={deleteWidget} aria-label="Delete" class="btn preset-filled-error-500">
 				<iconify-icon icon="icomoon-free:bin" width="24"></iconify-icon>
 				<span class="hidden sm:block">{m.button_delete()}</span>
 			</button>

@@ -181,7 +181,7 @@
 	</div>
 
 	<!-- Back Button -->
-	<button onclick={() => history.back()} aria-label="Back" class="variant-outline-primary btn-icon">
+	<button onclick={() => history.back()} aria-label="Back" class="preset-outline-primary btn-icon">
 		<iconify-icon icon="ri:arrow-left-line" width="20"></iconify-icon>
 	</button>
 </div>
@@ -195,7 +195,7 @@
 					type="button"
 					aria-haspopup="true"
 					aria-expanded={dropdownOpen}
-					class="variant-filled-tertiary btn gap-2 !text-white dark:variant-filled-primary"
+					class="btn gap-2 !text-white preset-filled-tertiary-500 dark:preset-filled-primary-500"
 				>
 					<iconify-icon icon="carbon:add-filled" width="24" class="text-white"></iconify-icon>
 					Add
@@ -218,7 +218,7 @@
 				{/if}
 			</div>
 		{/if}
-		<button class="variant-filled-warning btn" onclick={resetGrid}>Reset All</button>
+		<button class="btn preset-filled-warning-500" onclick={resetGrid}>Reset All</button>
 	</div>
 </div>
 

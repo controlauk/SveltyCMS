@@ -150,7 +150,7 @@ Features:
 					</tr>
 				</tbody>
 			</table>
-			<a href={myData?.videoUrl} target="_blank" rel="noreferrer" class="variant-filled-tertiary btn btn-sm mt-4">
+			<a href={myData?.videoUrl} target="_blank" rel="noreferrer" class="btn btn-sm mt-4 preset-filled-tertiary-500">
 				<span><iconify-icon icon="material-symbols:play-circle-outline" width="18"></iconify-icon></span>
 				<span>Watch Video</span>
 			</a>

@@ -201,7 +201,7 @@
 	{#if isMapboxEnabled}
 		<address class="w-full" class:error={!!validationError}>
 			<div class="mb-1 flex justify-between gap-2">
-				<button aria-label={m.widget_address_getfromaddress()} class="variant-filled-primary btn btn-base rounded-md text-white">
+				<button aria-label={m.widget_address_getfromaddress()} class="btn-base btn rounded-md text-white preset-filled-primary-500">
 					<iconify-icon icon="bi:map" width="16" class="mr-2"></iconify-icon>
 					{m.widget_address_getfromaddress()}
 				</button>
@@ -322,7 +322,7 @@
 
 				<!-- Country with search Combobox -->
 				<div>
-					<button class="input btn mt-2 w-full justify-between" use:popup={CountryCombobox}>
+					<button class="btn input mt-2 w-full justify-between" use:popup={CountryCombobox}>
 						<span class="capitalize">{listboxValue ?? 'Combobox'}</span>
 						<i class="fa-solid fa-caret-down opacity-50"></i>
 					</button>

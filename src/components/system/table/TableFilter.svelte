@@ -44,7 +44,7 @@
 
 <!-- Expanding Search -->
 {#if searchShow}
-	<div class="input-group input-group-divider grid grid-cols-[auto_1fr_auto]">
+	<div class="input-group-divider input-group grid grid-cols-[auto_1fr_auto]">
 		<!-- TODO: fix global search -->
 		<input
 			type="text"
@@ -67,7 +67,7 @@
 					}
 				}}
 				aria-label="Clear"
-				class="variant-filled-surface w-12"
+				class="w-12 preset-filled-surface-500"
 				><iconify-icon icon="ic:outline-search-off" width="24"></iconify-icon>
 			</button>
 		{/if}
@@ -80,7 +80,7 @@
 			searchShow = !searchShow;
 		}}
 		aria-label="Search"
-		class="variant-ghost-surface btn-icon"
+		class="preset-ghost-surface btn-icon"
 	>
 		<iconify-icon icon="material-symbols:search-rounded" width="24"></iconify-icon>
 	</button>
@@ -99,7 +99,7 @@
 			}
 		}}
 		aria-label="Filter"
-		class="variant-ghost-surface btn-icon"
+		class="preset-ghost-surface btn-icon"
 	>
 		<iconify-icon icon="carbon:filter-edit" width="24"></iconify-icon>
 	</button>
@@ -116,7 +116,7 @@
 			}
 		}}
 		aria-label="Column"
-		class="variant-ghost-surface btn-icon"
+		class="preset-ghost-surface btn-icon"
 	>
 		<iconify-icon icon="fluent:column-triple-edit-24-regular" width="24"></iconify-icon>
 	</button>
@@ -136,7 +136,7 @@
 			}
 		}}
 		aria-label="Density"
-		class="variant-ghost-surface btn-icon"
+		class="preset-ghost-surface btn-icon"
 	>
 		<iconify-icon
 			icon={density === 'compact'

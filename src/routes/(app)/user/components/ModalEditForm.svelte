@@ -284,7 +284,7 @@
 								{#each roles as role}
 									<button
 										type="button"
-										class="chip {isRoleActive(role._id) ? 'variant-filled-tertiary' : 'variant-ghost-secondary'}"
+										class="chip {isRoleActive(role._id) ? 'preset-filled-tertiary-500' : 'preset-ghost-secondary'}"
 										onclick={() => {
 											formData.role = role._id;
 											console.log('Selected Role:', formData.role);
@@ -310,7 +310,7 @@
 					<button
 						type="button"
 						onclick={deleteUser}
-						class="variant-filled-error btn"
+						class="btn preset-filled-error-500"
 						disabled={!isFirstUser && (!isGivenData || user._id == user_id)}
 					>
 						<iconify-icon icon="icomoon-free:bin" width="24"></iconify-icon><span class="hidden sm:block">{m.button_delete()}</span>
@@ -322,10 +322,12 @@
 
 				<div class="flex justify-between gap-4">
 					<!-- Cancel -->
-					<button type="button" class="variant-outline-secondary btn" onclick={() => parent.onClose()}>{m.button_cancel()}</button>
+					<button type="button" class="preset-outline-secondary btn" onclick={() => parent.onClose()}>{m.button_cancel()}</button>
 					<!-- Save -->
-					<button type="submit" class="variant-filled-tertiary btn btn dark:variant-filled-primary {parent.buttonPositive}" onclick={onFormSubmit}
-						>{m.button_save()}</button
+					<button
+						type="submit"
+						class="btn btn preset-filled-tertiary-500 dark:preset-filled-primary-500 {parent.buttonPositive}"
+						onclick={onFormSubmit}>{m.button_save()}</button
 					>
 				</div>
 			</footer>

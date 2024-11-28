@@ -166,7 +166,7 @@
 					<span class="text-tertiary-500 dark:text-primary-500">{iconselected}</span>
 				</p>
 			</div>
-			<button onmouseup={removeIcon} type="button" aria-label="Remove Icon" class="variant-ghost btn-icon">
+			<button onmouseup={removeIcon} type="button" aria-label="Remove Icon" class="preset-ghost btn-icon">
 				<iconify-icon icon="icomoon-free:bin" width="22" aria-hidden="true"></iconify-icon>
 			</button>
 		</div>
@@ -245,7 +245,7 @@
 						<button
 							disabled={page === 0}
 							onclick={prevPage}
-							class={`${page === 0 ? 'hidden' : 'block'} variant-filled-primary btn-sm rounded`}
+							class={`${page === 0 ? 'hidden' : 'block'} btn-sm rounded preset-filled-primary-500`}
 							aria-label="Previous page"
 						>
 							{m.button_previous()}
@@ -258,7 +258,7 @@
 						<button
 							disabled={icons.length < 50}
 							onclick={nextPage}
-							class={`${icons.length < 50 ? 'hidden' : 'block'} variant-filled-primary btn-sm rounded`}
+							class={`${icons.length < 50 ? 'hidden' : 'block'} btn-sm rounded preset-filled-primary-500`}
 							aria-label="Next page"
 						>
 							{m.button_next()}

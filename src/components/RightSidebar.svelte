@@ -189,7 +189,7 @@
 {#if ['edit', 'create'].includes(mode.value) || collection.value.permissions?.[user.role]?.write !== false}
 	<div class="flex h-full w-full flex-col justify-between px-1 py-2">
 		{#if $shouldShowNextButton && mode.value === 'create'}
-			<button type="button" onclick={next} aria-label="Next" class="variant-filled-primary btn w-full gap-2">
+			<button type="button" onclick={next} aria-label="Next" class="btn w-full gap-2 preset-filled-primary-500">
 				<iconify-icon icon="carbon:next-filled" width="24" class="font-extrabold text-white"></iconify-icon>
 				{m.button_next()}
 			</button>
@@ -200,7 +200,7 @@
 					type="button"
 					onclick={saveData}
 					disabled={collection.value.permissions?.[user.role]?.write === false}
-					class="variant-filled-primary btn w-full gap-2"
+					class="btn w-full gap-2 preset-filled-primary-500"
 					aria-label="Save entry"
 				>
 					<iconify-icon icon="material-symbols:save" width="24" class="font-extrabold text-white"></iconify-icon>
@@ -236,7 +236,7 @@
 						type="button"
 						onclick={() => $modifyEntry('deleted')}
 						disabled={collection.value.permissions?.[user.role]?.delete === false}
-						class="variant-filled-error btn w-full"
+						class="btn w-full preset-filled-error-500"
 						aria-label="Delete entry"
 					>
 						<iconify-icon icon="icomoon-free:bin" width="24"></iconify-icon>Delete
@@ -256,7 +256,7 @@
 					<button
 						onclick={openScheduleModal}
 						aria-label="Schedule publication"
-						class="variant-filled-surface btn w-full text-tertiary-500 dark:text-primary-500"
+						class="btn w-full text-tertiary-500 preset-filled-surface-500 dark:text-primary-500"
 					>
 						{schedule ? new Date(schedule).toLocaleString() : 'Schedule publication'}
 					</button>
@@ -268,7 +268,7 @@
 					<input
 						type="datetime-local"
 						bind:value={createdAtDate}
-						class="input variant-filled-surface text-tertiary-500 dark:text-primary-500"
+						class="input text-tertiary-500 preset-filled-surface-500 dark:text-primary-500"
 						aria-label="Set creation date"
 					/>
 				</div>
@@ -276,14 +276,14 @@
 				<!-- User Info -->
 				<div class="mt-2 flex w-full flex-col items-start justify-center">
 					<p class="mb-1">Created by:</p>
-					<div class="variant-filled-surface w-full p-2 text-center text-tertiary-500 dark:text-primary-500">
+					<div class="w-full p-2 text-center text-tertiary-500 preset-filled-surface-500 dark:text-primary-500">
 						{collectionValue.value.createdBy || user.username}
 					</div>
 
 					{#if collectionValue.value.updatedBy}
 						<p class="mt-1">Last updated by:</p>
 
-						<div class="variant-filled-surface w-full p-2 text-center text-tertiary-500 dark:text-primary-500">
+						<div class="w-full p-2 text-center text-tertiary-500 preset-filled-surface-500 dark:text-primary-500">
 							{collectionValue.value.updatedBy || user.username}
 						</div>
 					{/if}

@@ -45,13 +45,10 @@ Key features:
 	import FloatingNav from '@components/system/FloatingNav.svelte';
 
 	// Skeleton
-	import { initializeStores, Modal, Toast, setModeUserPrefers, setModeCurrent, setInitialClassState } from '@skeletonlabs/skeleton';
+	import { ToastProvider } from '@skeletonlabs/skeleton-svelte';
+
 	// Required for popups to function
 	import { computePosition, autoUpdate, offset, shift, flip, arrow } from '@floating-ui/dom';
-	import { storePopup } from '@skeletonlabs/skeleton';
-
-	storePopup.set({ computePosition, autoUpdate, offset, shift, flip, arrow });
-	initializeStores();
 
 	interface Props {
 		children?: import('svelte').Snippet;
@@ -221,7 +218,7 @@ Key features:
 					<aside
 						class="max-h-dvh {sidebarState.sidebar.value.left === 'full'
 							? 'w-[220px]'
-							: 'w-fit'} relative border-r bg-white !px-2 text-center dark:border-surface-500 dark:bg-gradient-to-r dark:from-surface-700 dark:to-surface-900"
+							: 'w-fit'} relative border-r bg-white !px-2 text-center dark:border-surface-500 dark:bg-gradient-to-r dark:from-surface-700 dark:to-surface-950"
 					>
 						<LeftSidebar />
 					</aside>
@@ -243,7 +240,9 @@ Key features:
 							? 'mb-2'
 							: 'mb-16'}"
 					>
-						<Toast />
+						<ToastProvider>
+							{@render children()}
+						</ToastProvider>
 						<Modal />
 
 						<!-- Floating Nav -->
@@ -272,7 +271,7 @@ Key features:
 					<!-- Page Footer -->
 					{#if sidebarState.sidebar.value.pagefooter !== 'hidden'}
 						<footer
-							class="sticky left-0 top-[calc(100%-51px)] z-10 w-full border-t bg-surface-50 bg-gradient-to-b px-1 text-center dark:border-surface-500 dark:from-surface-700 dark:to-surface-900"
+							class="sticky left-0 top-[calc(100%-51px)] z-10 w-full border-t bg-surface-50 bg-gradient-to-b px-1 text-center dark:border-surface-500 dark:from-surface-700 dark:to-surface-950"
 						>
 							<PageFooter />
 						</footer>
@@ -282,7 +281,7 @@ Key features:
 				<!-- Sidebar Right -->
 				{#if sidebarState.sidebar.value.right !== 'hidden'}
 					<aside
-						class="max-h-dvh w-[220px] border-l bg-surface-50 bg-gradient-to-r dark:border-surface-500 dark:from-surface-700 dark:to-surface-900"
+						class="max-h-dvh w-[220px] border-l bg-surface-50 bg-gradient-to-r dark:border-surface-500 dark:from-surface-700 dark:to-surface-950"
 					>
 						<RightSidebar />
 					</aside>

@@ -14,10 +14,27 @@
 	let formElement: HTMLFormElement | null = $state(null);
 
 	// Skeleton & Stores
-	import { getModalStore, getToastStore } from '@skeletonlabs/skeleton';
-	import type { ModalComponent } from '@skeletonlabs/skeleton';
+	import type { ModalComponent, ModalSettings } from '@skeletonlabs/skeleton';
+	import { getContext } from 'svelte';
+	import { type ToastContext } from '@skeletonlabs/skeleton-svelte';
+
+	export const toast: ToastContext = getContext('toast');
 	const modalStore = getModalStore();
-	const toastStore = getToastStore();
+
+	// Show corresponding Toast messages
+	function showToast(description: string, type: 'success' | 'info' | 'error') {
+		const types: Record<'success' | 'info' | 'error', 'success' | 'error' | 'info'> = {
+			success: 'success',
+			info: 'info',
+			error: 'error'
+		};
+		toast.create({
+			title: type.charAt(0).toUpperCase() + type.slice(1),
+			description,
+			type: types[type],
+			duration: 3000
+		});
+	}
 
 	// ParaglideJS
 	import * as m from '@src/paraglide/messages';
@@ -68,13 +85,7 @@
 			});
 
 			if (response.ok) {
-				const t = {
-					message: '<iconify-icon icon="mdi:check" color="white" width="24" class="mr-1"></iconify-icon> Token updated successfully',
-					background: 'gradient-tertiary',
-					timeout: 3000,
-					classes: 'border-1 !rounded-md'
-				};
-				toastStore.trigger(t);
+				showToast('Token updated successfully', 'success');
 				modalStore.close();
 				await invalidateAll();
 			} else {
@@ -83,13 +94,7 @@
 			}
 		} catch (err) {
 			const message = err instanceof Error ? err.message : 'Failed to update token';
-			const t = {
-				message: `<iconify-icon icon="mdi:alert-circle" color="white" width="24" class="mr-1"></iconify-icon> ${message}`,
-				background: 'variant-filled-error',
-				timeout: 3000,
-				classes: 'border-1 !rounded-md'
-			};
-			toastStore.trigger(t);
+			showToast(message, 'error');
 		}
 	}
 
@@ -104,13 +109,7 @@
 			});
 
 			if (response.ok) {
-				const t = {
-					message: '<iconify-icon icon="mdi:check" color="white" width="24" class="mr-1"></iconify-icon> Token deleted successfully',
-					background: 'gradient-tertiary',
-					timeout: 3000,
-					classes: 'border-1 !rounded-md'
-				};
-				toastStore.trigger(t);
+				showToast('Token deleted successfully', 'success');
 				modalStore.close();
 				await invalidateAll();
 			} else {
@@ -119,13 +118,7 @@
 			}
 		} catch (err) {
 			const message = err instanceof Error ? err.message : 'Failed to delete token';
-			const t = {
-				message: `<iconify-icon icon="mdi:alert-circle" color="white" width="24" class="mr-1"></iconify-icon> ${message}`,
-				background: 'variant-filled-error',
-				timeout: 3000,
-				classes: 'border-1 !rounded-md'
-			};
-			toastStore.trigger(t);
+			showToast(message, 'error');
 		}
 	}
 
@@ -154,7 +147,7 @@
 					color={errorStatus.user_id.status ? 'red' : 'base'}
 					type="text"
 					name="username"
-					class="peer block w-full appearance-none !rounded-none !border-0 !border-b-2 !border-surface-300 !bg-transparent px-6 py-2.5 text-sm text-surface-900 focus:border-tertiary-600 focus:outline-none focus:ring-0 dark:border-surface-600 dark:text-white dark:focus:border-tertiary-500"
+					class="peer block w-full appearance-none !rounded-none !border-0 !border-b-2 !border-surface-300 !bg-transparent px-6 py-2.5 text-sm text-surface-950 focus:border-tertiary-600 focus:outline-none focus:ring-0 dark:border-surface-600 dark:text-white dark:focus:border-tertiary-500"
 					placeholder=" "
 					required
 					disabled
@@ -182,7 +175,7 @@
 					color={errorStatus.email.status ? 'red' : 'base'}
 					type="email"
 					name="email"
-					class="peer block w-full appearance-none !rounded-none !border-0 !border-b-2 !border-surface-300 !bg-transparent px-6 py-2.5 text-sm text-surface-900 focus:border-tertiary-600 focus:outline-none focus:ring-0 dark:border-surface-600 dark:text-white dark:focus:border-tertiary-500"
+					class="peer block w-full appearance-none !rounded-none !border-0 !border-b-2 !border-surface-300 !bg-transparent px-6 py-2.5 text-sm text-surface-950 focus:border-tertiary-600 focus:outline-none focus:ring-0 dark:border-surface-600 dark:text-white dark:focus:border-tertiary-500"
 					placeholder=" "
 					required
 					disabled
@@ -208,7 +201,7 @@
 					color={errorStatus.token.status ? 'red' : 'base'}
 					type="text"
 					name="token"
-					class="peer block w-full appearance-none !rounded-none !border-0 !border-b-2 !border-surface-300 !bg-transparent px-6 py-2.5 text-sm text-surface-900 focus:border-tertiary-600 focus:outline-none focus:ring-0 dark:border-surface-600 dark:text-white dark:focus:border-tertiary-500"
+					class="peer block w-full appearance-none !rounded-none !border-0 !border-b-2 !border-surface-300 !bg-transparent px-6 py-2.5 text-sm text-surface-950 focus:border-tertiary-600 focus:outline-none focus:ring-0 dark:border-surface-600 dark:text-white dark:focus:border-tertiary-500"
 					placeholder=" "
 					required
 					disabled
@@ -237,7 +230,7 @@
 								{#each roles as r}
 									<button
 										type="button"
-										class="chip {formData.role === r._id ? 'variant-filled-tertiary' : 'variant-ghost-secondary'}"
+										class="chip {formData.role === r._id ? 'preset-filled-tertiary-500' : 'preset-ghost-secondary'}"
 										onclick={() => (formData.role = r._id)}
 									>
 										{#if formData.role === r._id}
@@ -257,15 +250,15 @@
 
 		<footer class="modal-footer flex items-center justify-between p-4 {parent?.regionFooter ?? ''}">
 			<!-- Delete -->
-			<button type="button" onclick={deleteToken} class="variant-filled-error btn">
+			<button type="button" onclick={deleteToken} class="btn preset-filled-error-500">
 				<iconify-icon icon="icomoon-free:bin" width="24"></iconify-icon><span class="hidden sm:block">{m.button_delete()}</span>
 			</button>
 
 			<div class="flex justify-between gap-2">
 				<!-- Cancel -->
-				<button class="variant-outline-secondary btn" onclick={parent?.onClose}>{m.button_cancel()}</button>
+				<button class="preset-outline-secondary btn" onclick={parent?.onClose}>{m.button_cancel()}</button>
 				<!-- Save -->
-				<button class="variant-filled-tertiary btn btn dark:variant-filled-primary{parent?.buttonPositive ?? ''}" onclick={onFormSubmit}
+				<button class="btn btn preset-filled-tertiary-500 dark:preset-filled-primary-500{parent?.buttonPositive ?? ''}" onclick={onFormSubmit}
 					>{m.button_save()}</button
 				>
 			</div>

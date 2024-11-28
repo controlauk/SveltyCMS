@@ -23,11 +23,29 @@
 	import PageTitle from '@components/PageTitle.svelte';
 
 	// Skeleton
-	import { Tab, TabGroup, getToastStore } from '@skeletonlabs/skeleton';
+	import { Tab, TabGroup } from '@skeletonlabs/skeleton';
 	import { getModalStore, type ModalSettings } from '@skeletonlabs/skeleton';
 
+	import { getContext } from 'svelte';
+	import { type ToastContext } from '@skeletonlabs/skeleton-svelte';
+
+	export const toast: ToastContext = getContext('toast');
 	const modalStore = getModalStore();
-	const toastStore = getToastStore();
+
+	// Show corresponding Toast messages
+	function showToast(description: string, type: 'success' | 'info' | 'error') {
+		const types: Record<'success' | 'info' | 'error', 'success' | 'error' | 'info'> = {
+			success: 'success',
+			info: 'info',
+			error: 'error'
+		};
+		toast.create({
+			title: type.charAt(0).toUpperCase() + type.slice(1),
+			description,
+			type: types[type],
+			duration: 3000
+		});
+	}
 
 	// Extract the collection name from the URL
 	const collectionTypes = $page.params.collectionTypes;
@@ -63,10 +81,6 @@
 	$effect.root(() => {
 		name = mode.value == 'edit' ? (collectionValue.value ? collectionValue.value.name : collectionTypes) : $page.params.collectionTypes;
 	});
-
-	interface PageTitleEvent {
-		detail: string;
-	}
 
 	function handlePageTitleUpdate(e: CustomEvent<string>) {
 		highlightedPart = e.detail;
@@ -116,15 +130,7 @@
 
 		if (resp.data.status === 200) {
 			// Trigger the toast
-			const t = {
-				message: "Collection Saved. You're all set to build your content.",
-				// Provide any utility or variant background style:
-				background: 'variant-filled-primary',
-				timeout: 3000,
-				// Add your custom classes here:
-				classes: 'border-1 !rounded-md'
-			};
-			toastStore.trigger(t);
+			showToast("Collection Saved. You're all set to build your content.", 'success');
 		}
 	}
 
@@ -145,15 +151,7 @@
 					});
 
 					// Trigger the toast
-					const t = {
-						message: 'Collection Deleted.',
-						// Provide any utility or variant background style:
-						background: 'variant-filled-error',
-						timeout: 3000,
-						// Add your custom classes here:
-						classes: 'border-1 !rounded-md'
-					};
-					toastStore.trigger(t);
+					showToast('Collection Deleted.', 'success');
 					goto(`/collection`);
 				} else {
 					// User cancelled, do not delete
@@ -177,7 +175,7 @@
 	<PageTitle name={pageTitle} highlight={highlightedPart} icon="ic:baseline-build" />
 
 	<!-- Back -->
-	<button onclick={() => history.back()} type="button" aria-label="Back" class="variant-outline-primary btn-icon">
+	<button onclick={() => history.back()} type="button" aria-label="Back" class="preset-outline-primary btn-icon">
 		<iconify-icon icon="ri:arrow-left-line" width="20"></iconify-icon>
 	</button>
 </div>
@@ -187,13 +185,13 @@
 		<button
 			type="button"
 			onclick={handleCollectionDelete}
-			class=" variant-filled-error btn mb-3 mr-1 mt-1 justify-end dark:variant-filled-error dark:text-black"
+			class=" btn mb-3 mr-1 mt-1 justify-end preset-filled-error-500 dark:text-black dark:preset-filled-error-500"
 			>{m.button_delete()}
 		</button>
 		<button
 			type="button"
 			onclick={handleCollectionSave}
-			class="variant-filled-tertiary btn mb-3 mr-1 mt-1 justify-end dark:variant-filled-tertiary dark:text-black">{m.button_save()}</button
+			class="btn mb-3 mr-1 mt-1 justify-end preset-filled-tertiary-500 dark:text-black dark:preset-filled-tertiary-500">{m.button_save()}</button
 		>
 	</div>
 {/if}

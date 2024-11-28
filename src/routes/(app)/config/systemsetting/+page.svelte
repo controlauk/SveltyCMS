@@ -6,11 +6,29 @@
 
 	// Skeleton
 	import ModalEditSystem from './ModalEditSystem.svelte';
-	import { getToastStore, getModalStore } from '@skeletonlabs/skeleton';
-	import type { ModalComponent, ModalSettings, ToastSettings } from '@skeletonlabs/skeleton';
+	import { getModalStore } from '@skeletonlabs/skeleton';
+	import type { ModalComponent, ModalSettings } from '@skeletonlabs/skeleton';
 
-	const toastStore = getToastStore();
+	import { getContext } from 'svelte';
+	import { type ToastContext } from '@skeletonlabs/skeleton-svelte';
+
+	export const toast: ToastContext = getContext('toast');
 	const modalStore = getModalStore();
+
+	// Show corresponding Toast messages
+	function showToast(description: string, type: 'success' | 'info' | 'error') {
+		const types: Record<'success' | 'info' | 'error', 'success' | 'error' | 'info'> = {
+			success: 'success',
+			info: 'info',
+			error: 'error'
+		};
+		toast.create({
+			title: type.charAt(0).toUpperCase() + type.slice(1),
+			description,
+			type: types[type],
+			duration: 3000
+		});
+	}
 
 	async function saveConfig(configData: { [key: string]: any }, isPrivate: boolean) {
 		try {
@@ -23,16 +41,16 @@
 			});
 			const result = await response.json();
 			if (result.success) {
-				toastStore.trigger({ message: 'Configuration saved successfully!', background: 'bg-success' } as ToastSettings);
+				showToast('Configuration saved successfully!', 'success');
 
 				// Trigger a restart API route
 				await triggerRestart();
 			} else {
-				toastStore.trigger({ message: 'Failed to save configuration.', background: 'bg-error' } as ToastSettings);
+				showToast('Failed to save configuration.', 'error');
 			}
 		} catch (error) {
 			console.error('Error saving configuration:', error);
-			toastStore.trigger({ message: 'Error saving configuration.', background: 'bg-error' } as ToastSettings);
+			showToast('Error saving configuration.', 'error');
 		}
 	}
 
@@ -46,13 +64,13 @@
 			});
 			const result = await response.json();
 			if (result.success) {
-				toastStore.trigger({ message: 'Server restart triggered successfully!', background: 'bg-success' } as ToastSettings);
+				showToast('Server restart triggered successfully!', 'success');
 			} else {
-				toastStore.trigger({ message: 'Failed to trigger server restart.', background: 'bg-error' } as ToastSettings);
+				showToast('Failed to trigger server restart.', 'error');
 			}
 		} catch (error) {
 			console.error('Error triggering server restart:', error);
-			toastStore.trigger({ message: 'Error triggering server restart.', background: 'bg-error' } as ToastSettings);
+			showToast('Error triggering server restart.', 'error');
 		}
 	}
 
@@ -113,7 +131,7 @@
 		<button
 			onclick={() => openModal(name, category, config.description, isPrivate)}
 			aria-label={config.description}
-			class="variant-outline-primary btn flex items-center justify-center gap-2"
+			class="preset-outline-primary btn flex items-center justify-center gap-2"
 		>
 			<div class="grid grid-cols-1 justify-items-center">
 				<iconify-icon icon={config.icon} width="28" class="text-tertiary-500 dark:text-primary-500"></iconify-icon>

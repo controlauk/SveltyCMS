@@ -169,8 +169,8 @@ Users can rotate the image left, right, or by a custom angle, with options to ap
 	</div>
 
 	<div class="mt-4 flex justify-around gap-4">
-		<button onclick={cancelRotation} class="variant-filled-error btn">Cancel</button>
-		<button onclick={resetRotation} class="variant-outline btn">Reset</button>
-		<button onclick={applyRotation} class="variant-filled-primary btn">Apply</button>
+		<button onclick={cancelRotation} class="btn preset-filled-error-500">Cancel</button>
+		<button onclick={resetRotation} class="preset-outline btn">Reset</button>
+		<button onclick={applyRotation} class="btn preset-filled-primary-500">Apply</button>
 	</div>
 </div>

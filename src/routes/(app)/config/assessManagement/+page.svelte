@@ -21,8 +21,11 @@ It provides an interface for users to:
 
 	// Skeleton
 	import { TabGroup, Tab } from '@skeletonlabs/skeleton';
-	import { getToastStore } from '@skeletonlabs/skeleton';
-	const toastStore = getToastStore();
+
+	import { getContext } from 'svelte';
+	import { type ToastContext } from '@skeletonlabs/skeleton-svelte';
+
+	export const toast: ToastContext = getContext('toast');
 
 	// Components
 	import PageTitle from '@components/PageTitle.svelte';
@@ -78,17 +81,17 @@ It provides an interface for users to:
 	};
 
 	// Show corresponding Toast messages
-	function showToast(message, type) {
-		const backgrounds = {
-			success: 'variant-filled-primary',
-			info: 'variant-filled-tertiary',
-			error: 'variant-filled-error'
+	function showToast(description: string, type: 'success' | 'info' | 'error') {
+		const types: Record<'success' | 'info' | 'error', 'success' | 'error' | 'info'> = {
+			success: 'success',
+			info: 'info',
+			error: 'error'
 		};
-		toastStore.trigger({
-			message: message,
-			background: backgrounds[type],
-			timeout: 3000,
-			classes: 'border-1 !rounded-md'
+		toast.create({
+			title: type.charAt(0).toUpperCase() + type.slice(1),
+			description,
+			type: types[type],
+			duration: 3000
 		});
 	}
 
@@ -106,12 +109,12 @@ It provides an interface for users to:
 	<!-- Row 2 (on mobile): Save and Reset Buttons -->
 	<div class="lgd:mt-0 mt-2 flex items-center justify-center gap-4 lg:justify-end">
 		<!-- Save with changes -->
-		<button onclick={() => saveAllRoles()} aria-label="Save" class="variant-filled-tertiary btn" disabled={!$modifiedPermissions}>
+		<button onclick={() => saveAllRoles()} aria-label="Save" class="btn preset-filled-tertiary-500" disabled={!$modifiedPermissions}>
 			Save ({$modifiedCount})
 		</button>
 
 		<!-- Reset -->
-		<button onclick={resetChanges} aria-label="Reset" class="variant-filled-secondary btn" disabled={!$modifiedPermissions}> Reset </button>
+		<button onclick={resetChanges} aria-label="Reset" class="btn preset-filled-secondary-500" disabled={!$modifiedPermissions}> Reset </button>
 	</div>
 </div>
 

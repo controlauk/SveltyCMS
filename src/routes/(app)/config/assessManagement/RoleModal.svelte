@@ -48,12 +48,12 @@
 	}
 </script>
 
-<div class="card w-modal space-y-4 p-4 shadow-xl">
+<div class="w-modal card space-y-4 p-4 shadow-xl">
 	<header class="text-center text-2xl font-bold">
 		{isEditMode ? 'Edit Role' : 'Create New Role'}
 	</header>
 
-	<form class="modal-form space-y-4 border border-surface-500 p-4 rounded-container-token" onsubmit={preventDefault(onFormSubmit)}>
+	<form class="modal-form rounded-container-token space-y-4 border border-surface-500 p-4" onsubmit={preventDefault(onFormSubmit)}>
 		<label class="label">
 			<span>Role Name:</span>
 			<input type="text" bind:value={formName} placeholder="Role Name" class="input" required />
@@ -67,7 +67,7 @@
 
 	<!-- Footer -->
 	<footer class="modal-footer flex justify-end gap-4">
-		<button class="variant-ghost-surface btn" onclick={parent.onClose}>{m.button_cancel()}</button>
-		<button class="variant-filled-primary btn" onclick={onFormSubmit}>{isEditMode ? 'Update' : 'Create'}</button>
+		<button class="preset-ghost-surface btn" onclick={parent.onClose}>{m.button_cancel()}</button>
+		<button class="btn preset-filled-primary-500" onclick={onFormSubmit}>{isEditMode ? 'Update' : 'Create'}</button>
 	</footer>
 </div>

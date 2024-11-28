@@ -192,7 +192,7 @@
 <div class="user-select-none mx-5 max-h-full min-w-[min(500px,90vw)] overflow-auto rounded bg-surface-400 shadow-xl">
 	{#each fields as field (field.id)}
 		<div
-			class="variant-ghost-tertiary relative w-full overflow-hidden hover:bg-error-500"
+			class="preset-ghost-tertiary relative w-full overflow-hidden hover:bg-error-500"
 			aria-label="Widget"
 			role="button"
 			tabindex="0"
@@ -221,7 +221,7 @@
 <!-- Edit individual selected widget  -->
 {#if currentField}
 	<div
-		class="fixed -top-16 left-0 z-20 flex h-full w-full flex-col items-center justify-center overflow-auto bg-white dark:bg-surface-900 {sidebarState
+		class="fixed -top-16 left-0 z-20 flex h-full w-full flex-col items-center justify-center overflow-auto bg-white dark:bg-surface-950 {sidebarState
 			.sidebar.value.left === 'full'
 			? 'left-[220px] '
 			: 'left-0 '}"
@@ -233,9 +233,9 @@
 
 			<div class="flex gap-2">
 				<!-- Save Button -->
-				<button class="variant-filled-primary btn" aria-label="Save" onclick={handleSave}>Save</button>
+				<button class="btn preset-filled-primary-500" aria-label="Save" onclick={handleSave}>Save</button>
 				<!-- Cancel Button -->
-				<button class="variant-ghost-secondary btn-icon mr-2" aria-label="Cancel" onclick={handleCancel}>
+				<button class="preset-ghost-secondary btn-icon mr-2" aria-label="Cancel" onclick={handleCancel}>
 					<iconify-icon icon="material-symbols:close" width="24"></iconify-icon>
 				</button>
 			</div>

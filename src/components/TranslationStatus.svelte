@@ -95,7 +95,7 @@
 				<div class="py-1" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
 					{#each publicEnv.AVAILABLE_CONTENT_LANGUAGES as lang (lang)}
 						<button
-							class="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+							class="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-950"
 							onclick={() => handleLanguageChange(lang as AvailableLanguageTag)}
 						>
 							<div class="flex items-center justify-between">

@@ -113,11 +113,11 @@ Features:
 				<p class="text-sm opacity-75">{m.widget_ImageUpload_Allowed()}.</p>
 
 				<div class="flex w-full justify-center gap-2">
-					<button onclick={openFileInput} class="variant-filled-tertiary btn mt-3 dark:variant-filled-primary">
+					<button onclick={openFileInput} class="btn mt-3 preset-filled-tertiary-500 dark:preset-filled-primary-500">
 						{m.widget_ImageUpload_BrowseNew()}
 					</button>
 
-					<button onclick={() => toggleMedia(true)} class="variant-filled-tertiary btn mt-3 dark:variant-filled-primary">
+					<button onclick={() => toggleMedia(true)} class="btn mt-3 preset-filled-tertiary-500 dark:preset-filled-primary-500">
 						{m.widget_ImageUpload_SelectMedia()}
 					</button>
 				</div>
@@ -135,7 +135,7 @@ Features:
 		>
 			<div class="bg-surface-100-800-token flex items-center justify-between border-b p-2">
 				<p class="ml-auto font-bold text-black dark:text-primary-500">{m.widget_ImageUpload_SelectImage()}</p>
-				<button onclick={() => toggleMedia(false)} aria-label="Close" class="variant-ghost-secondary btn-icon ml-auto">
+				<button onclick={() => toggleMedia(false)} aria-label="Close" class="preset-ghost-secondary btn-icon ml-auto">
 					<iconify-icon icon="material-symbols:close" width="24" class="text-tertiary-500 dark:text-primary-500"></iconify-icon>
 				</button>
 			</div>

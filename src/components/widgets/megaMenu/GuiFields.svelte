@@ -24,7 +24,7 @@
 <div class="box-border flex w-[99%] flex-col items-center overflow-auto border p-2">
 	<p>Menu Fields</p>
 
-	<button class="variant-filled-tertiary btn mb-4 mt-1 dark:variant-filled-primary" onclick={addLevel}>Add Level</button>
+	<button class="btn mb-4 mt-1 preset-filled-tertiary-500 dark:preset-filled-primary-500" onclick={addLevel}>Add Level</button>
 
 	{#each value as level, index}
 		<div class="m-3 border border-dashed border-white p-3 text-center">

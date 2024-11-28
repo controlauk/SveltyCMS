@@ -35,7 +35,12 @@
 	import * as m from '@src/paraglide/messages';
 
 	// Skeleton
-	import { getToastStore, getModalStore, type ModalSettings, type ModalComponent } from '@skeletonlabs/skeleton';
+	import { getContext } from 'svelte';
+	import { type ToastContext } from '@skeletonlabs/skeleton-svelte';
+
+	export const toast: ToastContext = getContext('toast');
+
+	import { getModalStore, type ModalSettings, type ModalComponent } from '@skeletonlabs/skeleton';
 
 	interface CategoryModalResponse {
 		newCategoryName: string;
@@ -68,7 +73,6 @@
 	let isLoading = $state(false);
 	let apiError = $state<string | null>(null);
 
-	const toastStore = getToastStore();
 	const modalStore = getModalStore();
 
 	// Initialize the categories store with the current config
@@ -244,17 +248,17 @@
 	}
 
 	// Show corresponding Toast messages
-	function showToast(message: string, type: 'success' | 'info' | 'error' = 'info'): void {
-		const backgrounds = {
-			success: 'variant-filled-primary',
-			info: 'variant-filled-tertiary',
-			error: 'variant-filled-error'
+	function showToast(description: string, type: 'success' | 'info' | 'error') {
+		const types: Record<'success' | 'info' | 'error', 'success' | 'error' | 'info'> = {
+			success: 'success',
+			info: 'info',
+			error: 'error'
 		};
-		toastStore.trigger({
-			message: message,
-			background: backgrounds[type],
-			timeout: 3000,
-			classes: 'border-1 !rounded-md'
+		toast.create({
+			title: type.charAt(0).toUpperCase() + type.slice(1),
+			description,
+			type: types[type],
+			duration: 3000
 		});
 	}
 </script>
@@ -268,7 +272,7 @@
 		onclick={() => modalAddCategory()}
 		type="button"
 		aria-label="Add New Category"
-		class="variant-filled-tertiary btn flex items-center justify-between gap-1 rounded font-bold dark:variant-filled-primary"
+		class="btn flex items-center justify-between gap-1 rounded font-bold preset-filled-tertiary-500 dark:preset-filled-primary-500"
 		disabled={isLoading}
 	>
 		<iconify-icon icon="bi:collection" width="18" class="text-white"></iconify-icon>
@@ -280,7 +284,7 @@
 		onclick={handleAddCollectionClick}
 		type="button"
 		aria-label="Add New Collection"
-		class="variant-filled-surface btn flex items-center justify-between gap-1 rounded font-bold"
+		class="btn flex items-center justify-between gap-1 rounded font-bold preset-filled-surface-500"
 		disabled={isLoading}
 	>
 		<iconify-icon icon="material-symbols:category" width="18"></iconify-icon>
@@ -291,7 +295,7 @@
 		type="button"
 		onclick={() => handleSave(new CustomEvent('save', { detail: { name: 'categories', data: currentConfig } }))}
 		aria-label="Save"
-		class="variant-filled-primary btn gap-2 lg:ml-4"
+		class="btn gap-2 preset-filled-primary-500 lg:ml-4"
 		disabled={isLoading}
 	>
 		{#if isLoading}

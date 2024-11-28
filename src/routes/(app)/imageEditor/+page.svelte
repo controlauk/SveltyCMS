@@ -252,13 +252,13 @@ Users can upload an image, applying various editing tools (crop, blur, rotate, z
 <div class="mb-2 flex items-center justify-between gap-2">
 	<input class="input my-2 h-10" type="file" accept="image/*" onchange={handleImageUpload} aria-label="Upload image file" />
 	{#if imageFile}
-		<button onclick={handleUndo} disabled={!canUndo} aria-label="Undo" class="variant-outline-tertiary btn-icon dark:variant-outline-secondary">
+		<button onclick={handleUndo} disabled={!canUndo} aria-label="Undo" class="preset-outline-tertiary dark:preset-outline-secondary btn-icon">
 			<iconify-icon icon="mdi:undo" width="24" class="text-tertiary-600"></iconify-icon>
 		</button>
-		<button onclick={handleRedo} disabled={!canRedo} aria-label="Redo" class="variant-outline-tertiary btn-icon dark:variant-outline-secondary">
+		<button onclick={handleRedo} disabled={!canRedo} aria-label="Redo" class="preset-outline-tertiary dark:preset-outline-secondary btn-icon">
 			<iconify-icon icon="mdi:redo" width="24" class="text-tertiary-600"></iconify-icon>
 		</button>
-		<button type="button" onclick={handleSave} aria-label="Save" class="variant-filled-tertiary btn-icon btn-icon dark:variant-filled-primary">
+		<button type="button" onclick={handleSave} aria-label="Save" class="btn-icon btn-icon preset-filled-tertiary-500 dark:preset-filled-primary-500">
 			<iconify-icon icon="material-symbols:save" width="24" class="text-white"></iconify-icon>
 		</button>
 	{/if}

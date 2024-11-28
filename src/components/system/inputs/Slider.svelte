@@ -10,40 +10,12 @@ Features:
 -->
 
 <script lang="ts">
-	import { RangeSlider } from '@skeletonlabs/skeleton';
+	import { Slider } from '@skeletonlabs/skeleton-svelte';
 
-	let {
-		value = $bindable({
-			max: 100,
-			current: 0
-		}),
-		onChange
-	} = $props<{
-		value?: {
-			max: number; // Maximum value for the slider
-			current: number; // Current selected value
-		};
-		onChange?: (value: number) => void; // Callback when value changes
-	}>();
-
-	// Function to handle value changes
-	function handleChange(event: Event) {
-		const customEvent = event as CustomEvent<number>;
-		value.current = customEvent.detail;
-		onChange?.(customEvent.detail);
-	}
+	let value = $state([0, 100]);
 </script>
 
 <label class="label" for="range-slider">
 	<span>Rating</span>
-	<RangeSlider
-		name="range-slider"
-		id="range-slider"
-		value={value.current}
-		on:change={handleChange}
-		max={value.max}
-		step={0.5}
-		ticked
-		class="w-full"
-	/>
+	<Slider bind:value markers={[25, 50, 75]} />
 </label>

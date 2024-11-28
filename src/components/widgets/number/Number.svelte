@@ -147,14 +147,14 @@
 		} else if (field?.maxlength && length > field?.maxlength) {
 			return 'bg-red-600';
 		} else if (field?.minlength) {
-			return '!variant-filled-surface';
+			return '!preset-filled-surface-500';
 		} else {
-			return '!variant-ghost-surface';
+			return '!preset-ghost-surface';
 		}
 	};
 </script>
 
-<div class="variant-filled-surface btn-group flex w-full rounded">
+<div class="btn-group flex w-full rounded preset-filled-surface-500">
 	{#if field?.prefix}
 		<button class="!px-2">{field?.prefix}</button>
 	{/if}

@@ -27,17 +27,20 @@ Features:
 -->
 
 <script lang="ts">
-	import { onMount } from 'svelte';
-	import { getToastStore } from '@skeletonlabs/skeleton';
-	import { goto } from '$app/navigation';
 	import { publicEnv } from '@root/config/public';
+
+	import { onMount } from 'svelte';
+	import { goto } from '$app/navigation';
 	import { sidebarState, toggleSidebar } from '@root/src/stores/sidebarStore.svelte';
 	import { screenSize } from '@root/src/stores/screenSizeStore.svelte';
 	import { mode } from '@root/src/stores/collectionStore.svelte';
 	import { get } from 'svelte/store';
 
-	// Toast notifications
-	const toastStore = getToastStore();
+	// Skeleton
+	import { getContext } from 'svelte';
+	import { type ToastContext } from '@skeletonlabs/skeleton-svelte';
+
+	export const toast: ToastContext = getContext('toast');
 
 	interface Props {
 		// Component props and state
@@ -52,11 +55,6 @@ Features:
 		parent?: string | null;
 	}> = $state([]);
 	let newFolderName = '';
-
-	// Determine if a folder is the root folder
-	function isRootFolder(folder: { name: string; parent?: string | null }): boolean {
-		return folder.name === publicEnv.MEDIA_FOLDER && folder.parent === null;
-	}
 
 	// Fetch virtual folders from the API
 	async function fetchVirtualFolders(): Promise<void> {
@@ -75,10 +73,11 @@ Features:
 			}
 		} catch (error) {
 			console.error('Error fetching folders:', error);
-			toastStore.trigger({
-				message: 'Error fetching folders',
-				background: 'variant-filled-error',
-				timeout: 3000
+			toast.create({
+				title: 'Error',
+				description: 'Error fetching folders',
+				type: 'error',
+				duration: 3000
 			});
 			folders = [];
 		}
@@ -97,10 +96,11 @@ Features:
 			const result = await response.json();
 
 			if (result.success) {
-				toastStore.trigger({
-					message: 'Folder created successfully',
-					background: 'variant-filled-success',
-					timeout: 3000
+				toast.create({
+					title: 'Success',
+					description: 'Folder created successfully',
+					type: 'success',
+					duration: 3000
 				});
 				newFolderName = '';
 				await fetchVirtualFolders();
@@ -109,10 +109,11 @@ Features:
 			}
 		} catch (error) {
 			console.error('Error creating folder:', error);
-			toastStore.trigger({
-				message: 'Error creating folder',
-				background: 'variant-filled-error',
-				timeout: 3000
+			toast.create({
+				title: 'Error',
+				description: 'Error creating folder',
+				type: 'error',
+				duration: 3000
 			});
 		}
 	}
@@ -128,10 +129,11 @@ Features:
 			const result = await response.json();
 
 			if (result.success) {
-				toastStore.trigger({
-					message: 'Folder updated successfully',
-					background: 'variant-filled-success',
-					timeout: 3000
+				toast.create({
+					title: 'Success',
+					description: 'Folder created successfully',
+					type: 'success',
+					duration: 3000
 				});
 				await fetchVirtualFolders();
 			} else {
@@ -139,10 +141,11 @@ Features:
 			}
 		} catch (error) {
 			console.error('Error updating folder:', error);
-			toastStore.trigger({
-				message: 'Error updating folder',
-				background: 'variant-filled-error',
-				timeout: 3000
+			toast.create({
+				title: 'Error',
+				description: 'Error updating folder',
+				type: 'error',
+				duration: 3000
 			});
 		}
 	}
@@ -158,10 +161,11 @@ Features:
 			const result = await response.json();
 
 			if (result.success) {
-				toastStore.trigger({
-					message: 'Folder deleted successfully',
-					background: 'variant-filled-success',
-					timeout: 3000
+				toast.create({
+					title: 'Success',
+					description: 'Folder deleted successfully',
+					type: 'success',
+					duration: 3000
 				});
 				await fetchVirtualFolders();
 			} else {
@@ -169,10 +173,12 @@ Features:
 			}
 		} catch (error) {
 			console.error('Error deleting folder:', error);
-			toastStore.trigger({
-				message: 'Error deleting folder',
-				background: 'variant-filled-error',
-				timeout: 3000
+
+			toast.create({
+				title: 'Error',
+				description: 'Error deleting folder',
+				type: 'error',
+				duration: 3000
 			});
 		}
 	}
@@ -233,7 +239,7 @@ Features:
 			{#each folders.filter((f) => !currentFolder || f.parent === currentFolder?._id) as folder (folder._id)}
 				{#if sidebarState.sidebar.value.left === 'full'}
 					<!-- Sidebar Expanded -->
-					<div class="nowrap variant-outline-surface flex w-full">
+					<div class="nowrap preset-outline-surface flex w-full">
 						<button onclick={() => openFolder(folder._id)} aria-label={`Open folder: ${folder.name}`} class="btn flex items-center space-x-2 p-2">
 							<iconify-icon icon="mdi:folder" width="28" class="text-yellow-500"></iconify-icon>
 							<span class="flex-1 overflow-hidden text-ellipsis text-left text-sm">{folder.name}</span>
@@ -255,7 +261,7 @@ Features:
 	{:else}
 		<!-- No Folders Found Message -->
 		<div class="w-full pt-4 text-center">
-			<p class="variant-outline-secondary btn w-full text-sm text-warning-500">No folders</p>
+			<p class="preset-outline-secondary btn w-full text-sm text-warning-500">No folders</p>
 		</div>
 	{/if}
 </div>

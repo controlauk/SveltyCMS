@@ -203,19 +203,19 @@
 
 		<footer class="modal-footer flex {existingCategory.name ? 'justify-between' : 'justify-end'} {parent.regionFooter}">
 			{#if existingCategory.name}
-				<button type="button" onclick={deleteCategory} class="variant-filled-error btn" aria-label="Delete category" disabled={isSubmitting}>
+				<button type="button" onclick={deleteCategory} class="btn preset-filled-error-500" aria-label="Delete category" disabled={isSubmitting}>
 					<iconify-icon icon="icomoon-free:bin" width="24"></iconify-icon>
 					<span class="hidden md:inline">{m.button_delete()}</span>
 				</button>
 			{/if}
 
 			<div class="flex gap-2">
-				<button type="button" onclick={parent.onClose} class="variant-outline-secondary btn" aria-label={m.button_cancel()} disabled={isSubmitting}>
+				<button type="button" onclick={parent.onClose} class="preset-outline-secondary btn" aria-label={m.button_cancel()} disabled={isSubmitting}>
 					{m.button_cancel()}
 				</button>
 				<button
 					type="submit"
-					class="variant-filled-tertiary btn dark:variant-filled-primary {parent.buttonPositive}"
+					class="btn preset-filled-tertiary-500 dark:preset-filled-primary-500 {parent.buttonPositive}"
 					aria-label={m.button_save()}
 					disabled={isSubmitting}
 				>

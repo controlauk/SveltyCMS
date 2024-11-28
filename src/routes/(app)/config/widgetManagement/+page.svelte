@@ -77,7 +77,7 @@ Features:
 				</div>
 			</div>
 			<button
-				class="btn mx-2 min-w-[200px] variant-{widget.status === 'active' ? 'ghost-error ' : 'filled-primary'}"
+				class="btn mx-2 min-w-[200px] preset-{widget.status === 'active' ? 'ghost-error ' : 'filled-primary'}"
 				onclick={() => toggleWidget(widget)}
 			>
 				{widget.status === 'active' ? 'Deactivate' : 'Activate'}
@@ -95,7 +95,7 @@ Features:
 			target="_blank"
 			rel="noopener noreferrer"
 			aria-label={m.config_Martketplace()}
-			class="variant-ghost-primary btn w-full"
+			class="preset-ghost-primary btn w-full"
 		>
 			<iconify-icon icon="icon-park-outline:shopping-bag" width="28" class="text-white"></iconify-icon>
 			<p class="uppercase">{m.config_Martketplace()}</p>

@@ -31,8 +31,25 @@ Features:
 	import MediaTable from './MediaTable.svelte';
 
 	// Skeleton
-	import { getToastStore } from '@skeletonlabs/skeleton';
-	const toastStore = getToastStore();
+	import { getContext } from 'svelte';
+	import { type ToastContext } from '@skeletonlabs/skeleton-svelte';
+
+	export const toast: ToastContext = getContext('toast');
+
+	// Show corresponding Toast messages
+	function showToast(description: string, type: 'success' | 'info' | 'error') {
+		const types: Record<'success' | 'info' | 'error', 'success' | 'error' | 'info'> = {
+			success: 'success',
+			info: 'info',
+			error: 'error'
+		};
+		toast.create({
+			title: type.charAt(0).toUpperCase() + type.slice(1),
+			description,
+			type: types[type],
+			duration: 3000
+		});
+	}
 
 	// Types
 	interface VirtualFolder {
@@ -41,12 +58,6 @@ Features:
 		path: string[] | string;
 		parent?: string | null;
 	}
-
-	type Folder = {
-		_id: string;
-		name: string;
-		path: string[];
-	};
 
 	// Props using runes
 	const { data = { user: undefined, media: [], virtualFolders: [] } } = $props<{
@@ -168,21 +179,13 @@ Features:
 
 			if (result.success) {
 				folders = await fetchUpdatedFolders();
-				toastStore.trigger({
-					message: 'Folder created successfully',
-					background: 'variant-filled-success',
-					timeout: 3000
-				});
+				showToast('Folder created successfully', 'success');
 			} else {
 				throw new Error(result.error || 'Failed to create folder');
 			}
 		} catch (error) {
 			console.error('Error creating folder:', error);
-			toastStore.trigger({
-				message: 'Failed to create folder',
-				background: 'variant-filled-error',
-				timeout: 3000
-			});
+			showToast('Failed to create folder', 'error');
 		}
 	}
 
@@ -202,11 +205,7 @@ Features:
 			}
 		} catch (error) {
 			console.error('Error fetching updated folders:', error);
-			toastStore.trigger({
-				message: 'Failed to fetch folders',
-				background: 'variant-filled-error',
-				timeout: 3000
-			});
+			showToast('Failed to fetch folders', 'error');
 			return [];
 		}
 	}
@@ -230,11 +229,7 @@ Features:
 		} catch (error: unknown) {
 			console.error(`Error fetching media files:`, error);
 			const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-			toastStore.trigger({
-				message: errorMessage,
-				background: 'variant-filled-error',
-				timeout: 3000
-			});
+			showToast(errorMessage, 'error');
 			files = [];
 			folders = [];
 		}
@@ -263,11 +258,7 @@ Features:
 			await fetchMediaFiles();
 		} catch (error) {
 			console.error('Error opening folder:', error);
-			toastStore.trigger({
-				message: 'Failed to open folder',
-				background: 'variant-filled-error',
-				timeout: 3000
-			});
+			showToast('Failed to open folder', 'error');
 		}
 	}
 
@@ -292,22 +283,14 @@ Features:
 			});
 			const result = response.data;
 			if (result?.success) {
-				toastStore.trigger({
-					message: 'Image deleted successfully.',
-					background: 'variant-filled-success',
-					timeout: 3000
-				});
+				showToast('Image deleted successfully.', 'success');
 				await fetchMediaFiles();
 			} else {
 				throw new Error(result.error || 'Failed to delete image');
 			}
 		} catch (error) {
 			console.error('Error deleting image: ', error);
-			toastStore.trigger({
-				message: 'Error deleting image',
-				background: 'variant-filled-error',
-				timeout: 3000
-			});
+			showToast('Error deleting image', 'error');
 		}
 	}
 </script>
@@ -320,13 +303,13 @@ Features:
 	<!-- Row 2 (on mobile): Save and Reset Buttons -->
 	<div class="lgd:mt-0 flex items-center justify-center gap-4 lg:justify-end">
 		<!-- Add folder -->
-		<button onclick={() => createFolder('New Folder')} aria-label="Add folder" class="variant-filled-tertiary btn gap-2">
+		<button onclick={() => createFolder('New Folder')} aria-label="Add folder" class="btn gap-2 preset-filled-tertiary-500">
 			<iconify-icon icon="mdi:folder-add-outline" width="24"></iconify-icon>
 			Add folder
 		</button>
 
 		<!-- Add Media -->
-		<button onclick={() => goto('/mediagallery/uploadMedia')} aria-label="Add Media" class="variant-filled-primary btn gap-2">
+		<button onclick={() => goto('/mediagallery/uploadMedia')} aria-label="Add Media" class="btn gap-2 preset-filled-primary-500">
 			<iconify-icon icon="carbon:add-filled" width="24"></iconify-icon>
 			Add Media
 		</button>
@@ -339,10 +322,10 @@ Features:
 <div class="wrapper overflow-auto">
 	<div class="mb-8 flex w-full flex-col justify-center gap-1 md:hidden">
 		<label for="globalSearch">Search</label>
-		<div class="input-group input-group-divider grid max-w-md grid-cols-[auto_1fr_auto]">
+		<div class="input-group-divider input-group grid max-w-md grid-cols-[auto_1fr_auto]">
 			<input id="globalSearch" type="text" placeholder="Search" class="input" bind:value={globalSearchValue} />
 			{#if globalSearchValue}
-				<button onclick={() => (globalSearchValue = '')} aria-label="Clear search" class="variant-filled-surface w-12">
+				<button onclick={() => (globalSearchValue = '')} aria-label="Clear search" class="w-12 preset-filled-surface-500">
 					<iconify-icon icon="ic:outline-search-off" width="24"></iconify-icon>
 				</button>
 			{/if}
@@ -360,7 +343,7 @@ Features:
 
 			<div class="flex flex-col text-center">
 				<label for="sortButton">Sort</label>
-				<button id="sortButton" aria-label="Sort" class="variant-ghost-surface btn">
+				<button id="sortButton" aria-label="Sort" class="preset-ghost-surface btn">
 					<iconify-icon icon="flowbite:sort-outline" width="24"></iconify-icon>
 				</button>
 			</div>
@@ -427,10 +410,10 @@ Features:
 	<div class="mb-2 hidden items-center justify-between gap-1 md:flex md:gap-3">
 		<div class="mb-8 flex w-full flex-col justify-center gap-1">
 			<label for="globalSearchMd">Search</label>
-			<div class="input-group input-group-divider grid max-w-md grid-cols-[auto_1fr_auto]">
+			<div class="input-group-divider input-group grid max-w-md grid-cols-[auto_1fr_auto]">
 				<input bind:value={globalSearchValue} id="globalSearchMd" type="text" placeholder="Search" class="input" />
 				{#if globalSearchValue}
-					<button onclick={clearSearch} class="variant-filled-surface w-12" aria-label="Clear search">
+					<button onclick={clearSearch} class="w-12 preset-filled-surface-500" aria-label="Clear search">
 						<iconify-icon icon="ic:outline-search-off" width="24"></iconify-icon>
 					</button>
 				{/if}
@@ -450,7 +433,7 @@ Features:
 
 		<div class="mb-8 flex flex-col justify-center gap-1 text-center">
 			<label for="sortButton">Sort</label>
-			<button id="sortButton" class="variant-ghost-surface btn" aria-label="Sort">
+			<button id="sortButton" class="preset-ghost-surface btn" aria-label="Sort">
 				<iconify-icon icon="flowbite:sort-outline" width="24"></iconify-icon>
 			</button>
 		</div>

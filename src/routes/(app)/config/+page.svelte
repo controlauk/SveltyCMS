@@ -61,7 +61,7 @@ Features:
 		<PermissionGuard config={permissionConfigs.collectionbuilder}>
 			<a
 				href="/config/collectionbuilder"
-				class="config-btn variant-outline-tertiary dark:variant-outline-secondary"
+				class="config-btn preset-outline-tertiary dark:preset-outline-secondary"
 				aria-label={m.config_collectionbuilder()}
 			>
 				<iconify-icon icon="fluent-mdl2:build-definition" class="config-icon text-tertiary-600"></iconify-icon>
@@ -76,7 +76,7 @@ Features:
 				target="_blank"
 				rel="noopener noreferrer"
 				aria-label={m.config_graphql()}
-				class="config-btn variant-outline-tertiary dark:variant-outline-secondary"
+				class="config-btn preset-outline-tertiary dark:preset-outline-secondary"
 			>
 				<iconify-icon icon="teenyicons:graphql-solid" class="config-icon text-warning-600"></iconify-icon>
 				<p class="config-text">{m.config_graphql()}</p>
@@ -85,7 +85,7 @@ Features:
 
 		<!-- Editor -->
 		<PermissionGuard config={permissionConfigs.imageeditor}>
-			<a href="/imageEditor" aria-label={m.config_imageeditor()} class="config-btn variant-outline-tertiary dark:variant-outline-secondary">
+			<a href="/imageEditor" aria-label={m.config_imageeditor()} class="config-btn preset-outline-tertiary dark:preset-outline-secondary">
 				<iconify-icon icon="bi:image" class="config-icon text-primary-600"></iconify-icon>
 				<p class="config-text">{m.config_imageeditor()}</p>
 			</a>
@@ -93,7 +93,7 @@ Features:
 
 		<!-- Dashboard -->
 		<PermissionGuard config={permissionConfigs.dashboard}>
-			<a href="/dashboard" class="config-btn variant-outline-tertiary dark:variant-outline-secondary" aria-label={m.config_Dashboard()}>
+			<a href="/dashboard" class="config-btn preset-outline-tertiary dark:preset-outline-secondary" aria-label={m.config_Dashboard()}>
 				<iconify-icon icon="bi:bar-chart-line" class="config-icon text-error-600"></iconify-icon>
 				<p class="config-text">{m.config_Dashboard()}</p>
 			</a>
@@ -104,7 +104,7 @@ Features:
 			href="https://www.sveltyCMS.com"
 			target="_blank"
 			rel="noopener noreferrer"
-			class="config-btn variant-ghost-primary"
+			class="config-btn preset-ghost-primary"
 			aria-label={m.config_Martketplace()}
 		>
 			<iconify-icon icon="icon-park-outline:shopping-bag" class="config-icon text-white"></iconify-icon>
@@ -113,7 +113,7 @@ Features:
 
 		<!-- Widget Management -->
 		<PermissionGuard config={permissionConfigs.widgetManagement}>
-			<a href="/config/widgetManagement" aria-label="Widget Management" class="config-btn variant-ghost-primary">
+			<a href="/config/widgetManagement" aria-label="Widget Management" class="config-btn preset-ghost-primary">
 				<iconify-icon icon="mdi:widgets" class="config-icon text-white"></iconify-icon>
 				<p class="config-text">Widget Management</p>
 			</a>
@@ -121,7 +121,7 @@ Features:
 
 		<!-- Theme Management -->
 		<PermissionGuard config={permissionConfigs.themeManagement}>
-			<a href="/config/themeManagement" aria-label="Theme Management" class="config-btn variant-ghost-primary">
+			<a href="/config/themeManagement" aria-label="Theme Management" class="config-btn preset-ghost-primary">
 				<iconify-icon icon="ph:layout" class="config-icon text-white"></iconify-icon>
 				<p class="config-text">Themes</p>
 			</a>
@@ -129,7 +129,7 @@ Features:
 
 		<!-- Settings -->
 		<PermissionGuard config={permissionConfigs.settings}>
-			<a href="/config/systemsetting" aria-label="System Settings" class="config-btn variant-ghost-error">
+			<a href="/config/systemsetting" aria-label="System Settings" class="config-btn preset-ghost-error">
 				<iconify-icon icon="uil:setting" class="config-icon text-white"></iconify-icon>
 				<p class="config-text">Settings</p>
 			</a>
@@ -137,7 +137,7 @@ Features:
 
 		<!-- Access Management -->
 		<PermissionGuard config={permissionConfigs.accessManagement}>
-			<a href="/config/assessManagement" aria-label="Access Management" class="config-btn variant-ghost-error">
+			<a href="/config/assessManagement" aria-label="Access Management" class="config-btn preset-ghost-error">
 				<iconify-icon icon="mdi:account-group" class="config-icon text-white"></iconify-icon>
 				<p class="config-text">Access Management</p>
 			</a>

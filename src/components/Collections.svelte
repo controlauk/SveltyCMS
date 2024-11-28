@@ -37,15 +37,11 @@ Features:
 	import * as m from '@src/paraglide/messages';
 
 	// Skeleton
-	import { Accordion, AccordionItem } from '@skeletonlabs/skeleton';
-	import { popup } from '@skeletonlabs/skeleton';
-	import type { PopupSettings } from '@skeletonlabs/skeleton';
+	import { Accordion, Tooltip } from '@skeletonlabs/skeleton-svelte';
 
-	const popupCollections: PopupSettings = {
-		event: 'hover',
-		target: 'popupHover',
-		placement: 'right'
-	};
+	// Accordion State
+	let openCategories = $state<string[]>([]);
+
 	// Import VirtualFolders component
 	import VirtualFolders from '@components/VirtualFolders.svelte';
 
@@ -166,14 +162,17 @@ Features:
 
 	// Handle collection selection
 	function handleCollectionSelect(_collection: Schema) {
-		if (mode.value === 'edit') {
-			mode.set('view');
-		} else {
-			mode.set(modeSet);
-			shouldShowNextButton.set(true);
+		if (_collection.id) {
+			goto(`/collections/${_collection.id}`);
+			if (mode.value === 'edit') {
+				mode.set('view');
+			} else {
+				mode.set(modeSet);
+				shouldShowNextButton.set(true);
+			}
+			collection.set(_collection);
+			handleSidebarToggle();
 		}
-		collection.set(_collection);
-		handleSidebarToggle();
 	}
 
 	// Generate unique key for collection items
@@ -182,19 +181,11 @@ Features:
 		return `${categoryId}-${String(_collection.name)}-${_collection.id}`;
 	}
 
-	// Track open states for subcategories
-	let subCategoryOpenStates = $state<Record<string, boolean>>({});
-
-	// Handle subcategory accordion state
-	function handleSubcategoryToggle(categoryId: string, subcategoryKey: string) {
-		const key = `${categoryId}-${subcategoryKey}`;
-		subCategoryOpenStates[key] = !subCategoryOpenStates[key];
-	}
-
-	// Handle keyboard events
+	// Handlers
 	function handleKeydown(event: KeyboardEvent) {
-		if (event.key === 'Enter') {
-			const target = event.currentTarget as HTMLElement;
+		if (event.key === 'Enter' || event.key === ' ') {
+			event.preventDefault();
+			const target = event.target as HTMLElement;
 			target.click();
 		}
 	}
@@ -214,13 +205,13 @@ Features:
 					}
 					searchShow = true;
 				}}
-				class="input btn mb-2 w-full"
+				class="btn input mb-2 w-full"
 				aria-label="Search Collections"
 			>
 				<iconify-icon icon="ic:outline-search" width="24"></iconify-icon>
 			</button>
 		{:else}
-			<div class="input-group input-group-divider mb-2 grid grid-cols-[1fr_auto]">
+			<div class="input-group-divider input-group mb-2 grid grid-cols-[1fr_auto]">
 				<input
 					type="text"
 					placeholder={m.collections_search()}
@@ -229,44 +220,35 @@ Features:
 					onfocus={() => (searchShow = false)}
 					class="input h-12 outline-none transition-all duration-500 ease-in-out"
 				/>
-				<button onclick={clearSearch} class="variant-filled-surface w-12" aria-label="Clear search">
+				<button onclick={clearSearch} class="w-12 preset-filled-surface-500" aria-label="Clear search">
 					<iconify-icon icon="ic:outline-search-off" width="24"></iconify-icon>
 				</button>
 			</div>
 		{/if}
 
 		<!-- Collections Accordion -->
-		<Accordion
-			autocollapse
-			spacing="space-y-1"
-			rounded="rounded-container-token"
-			padding="py-2 px-4"
-			regionControl="btn bg-surface-400 dark:bg-surface-500 uppercase text-white hover:!bg-surface-300"
-			hover="hover:bg-primary-hover-token"
-			caretOpen="rotate-180"
-		>
-			{#if filteredCategories.length > 0}
-				{#each filteredCategories as category (category.name)}
-					<AccordionItem
-						bind:open={category.open}
-						regionPanel="divide-y dark:divide-black my-0"
-						class={`divide-y rounded-md bg-surface-300 dark:divide-black ${getIndentClass(category.level)}`}
-					>
-						{#snippet lead()}
-							<iconify-icon icon={category.icon} width="24" class="text-error-500 rtl:ml-2" use:popup={popupCollections}></iconify-icon>
-						{/snippet}
-
-						{#snippet summary()}
-							{#if sidebarState.sidebar.value.left === 'full'}
-								<p class="text-white">{category.name}</p>
-							{/if}
-							<div class="card variant-filled-secondary p-4" data-popup="popupHover">
-								<p>{category.name}</p>
-								<div class="variant-filled-secondary arrow"></div>
-							</div>
-						{/snippet}
-
-						{#snippet content()}
+		<Accordion bind:value={openCategories} multiple>
+			{#each filteredCategories as category}
+				<Accordion.Item value={category.name}>
+					{#snippet lead()}
+						<Tooltip positioning={{ placement: 'right' }} openDelay={200}>
+							{#snippet trigger()}
+								<iconify-icon icon={category.icon} width="24" class="text-error-500 rtl:ml-2"></iconify-icon>
+							{/snippet}
+							{#snippet content()}
+								<div class="card p-4 preset-filled-secondary-500">
+									<p>{category.name}</p>
+								</div>
+							{/snippet}
+						</Tooltip>
+					{/snippet}
+					{#snippet control()}
+						{#if sidebarState.sidebar.value.left === 'full'}
+							<p class="text-white">{category.name}</p>
+						{/if}
+					{/snippet}
+					{#snippet panel()}
+						<div class={`divide-y rounded-md bg-surface-300 dark:divide-black ${getIndentClass(category.level)}`}>
 							<!-- Collections in this category -->
 							{#if category.collections?.length}
 								{#each category.collections as _collection (getCollectionKey(_collection, category.name.toString()))}
@@ -280,85 +262,106 @@ Features:
 										onclick={() => handleCollectionSelect(_collection)}
 									>
 										{#if sidebarState.sidebar.value.left === 'full'}
-											<iconify-icon icon={_collection.icon} width="24" class="px-2 py-1 text-error-600"></iconify-icon>
+											<Tooltip positioning={{ placement: 'right' }} openDelay={200}>
+												{#snippet trigger()}
+													<iconify-icon icon={_collection.icon} width="24" class="px-2 py-1 text-error-600"></iconify-icon>
+												{/snippet}
+												{#snippet content()}
+													<div class="card p-4 preset-filled-secondary-500">
+														<p>{_collection.name}</p>
+													</div>
+												{/snippet}
+											</Tooltip>
 											<p class="mr-auto text-center capitalize">{_collection.name}</p>
 										{:else}
 											<p class="text-xs capitalize">{_collection.name}</p>
-											<iconify-icon icon={_collection.icon} width="24" class="text-error-600"></iconify-icon>
+											<Tooltip positioning={{ placement: 'right' }} openDelay={200}>
+												{#snippet trigger()}
+													<iconify-icon icon={_collection.icon} width="24" class="text-error-600"></iconify-icon>
+												{/snippet}
+												{#snippet content()}
+													<div class="card p-4 preset-filled-secondary-500">
+														<p>{_collection.name}</p>
+													</div>
+												{/snippet}
+											</Tooltip>
 										{/if}
 									</div>
 								{/each}
 							{/if}
 
-							<!-- Subcategories with Autocollapse -->
+							<!-- Subcategories -->
 							{#if category.subcategories && Object.keys(category.subcategories).length > 0}
-								<Accordion
-									autocollapse
-									spacing="space-y-1"
-									rounded="rounded-container-token"
-									padding="py-1"
-									regionControl="btn bg-surface-300 dark:bg-surface-400 uppercase text-white hover:!bg-surface-300"
-									hover="hover:bg-primary-hover-token"
-									caretOpen="rotate-180"
-									class="-mr-4"
-								>
-									{#each Object.entries(category.subcategories) as [key, subCategory] (key)}
-										<div class={getIndentClass(category.level + 1)}>
-											<AccordionItem
-												bind:open={subCategoryOpenStates[`${category.name}-${key}`]}
-												onclick={() => handleSubcategoryToggle(category.name.toString(), key)}
-												regionPanel="divide-y dark:divide-black my-0"
-												class="divide-y rounded-md bg-surface-300 dark:bg-surface-400"
-											>
-												{#snippet lead()}
-													<iconify-icon icon={subCategory.icon} width="24" class="text-error-500 rtl:ml-2" use:popup={popupCollections}
-													></iconify-icon>
+								{#each Object.entries(category.subcategories) as [subKey, subCategory]}
+									<Accordion.Item value={`${category.name}-${subKey}`}>
+										{#snippet lead()}
+											<Tooltip positioning={{ placement: 'right' }} openDelay={200}>
+												{#snippet trigger()}
+													<iconify-icon icon={subCategory.icon} width="24" class="text-error-500 rtl:ml-2"></iconify-icon>
 												{/snippet}
-
-												{#snippet summary()}
-													{#if sidebarState.sidebar.value.left === 'full'}
-														<p class="uppercase text-white">{subCategory.name}</p>
-													{/if}
-													<div class="card variant-filled-secondary p-4" data-popup="popupHover">
+												{#snippet content()}
+													<div class="card p-4 preset-filled-secondary-500">
 														<p class="uppercase">{subCategory.name}</p>
-														<div class="variant-filled-secondary arrow"></div>
 													</div>
 												{/snippet}
-
-												{#snippet content()}
-													{#if subCategory.collections?.length}
-														{#each subCategory.collections as _collection (getCollectionKey(_collection, subCategory.name.toString()))}
-															<div
-																role="button"
-																tabindex={0}
-																class="-mx-4 flex {sidebarState.sidebar.value.left === 'full'
-																	? 'flex-row items-center pl-3'
-																	: 'flex-col items-center'} py-1 hover:bg-surface-400 hover:text-white"
-																onkeydown={handleKeydown}
-																onclick={() => handleCollectionSelect(_collection)}
-															>
-																{#if sidebarState.sidebar.value.left === 'full'}
-																	<iconify-icon icon={_collection.icon} width="24" class="px-2 py-1 text-error-600"></iconify-icon>
-																	<p class="mr-auto text-center capitalize">{_collection.name}</p>
-																{:else}
-																	<p class="text-xs capitalize">{_collection.name}</p>
-																	<iconify-icon icon={_collection.icon} width="24" class="text-error-600"></iconify-icon>
-																{/if}
-															</div>
-														{/each}
-													{/if}
-												{/snippet}
-											</AccordionItem>
-										</div>
-									{/each}
-								</Accordion>
+											</Tooltip>
+										{/snippet}
+										{#snippet control()}
+											{#if sidebarState.sidebar.value.left === 'full'}
+												<p class="uppercase text-white">{subCategory.name}</p>
+											{/if}
+										{/snippet}
+										{#snippet panel()}
+											<div class={`divide-y rounded-md bg-surface-300 dark:divide-black ${getIndentClass(category.level + 1)}`}>
+												{#if subCategory.collections?.length}
+													{#each subCategory.collections as _collection (getCollectionKey(_collection, subCategory.name.toString()))}
+														<div
+															role="button"
+															tabindex={0}
+															class="-mx-4 flex {sidebarState.sidebar.value.left === 'full'
+																? 'flex-row items-center pl-3'
+																: 'flex-col items-center'} py-1 hover:bg-surface-400 hover:text-white"
+															onkeydown={handleKeydown}
+															onclick={() => handleCollectionSelect(_collection)}
+														>
+															{#if sidebarState.sidebar.value.left === 'full'}
+																<Tooltip positioning={{ placement: 'right' }} openDelay={200}>
+																	{#snippet trigger()}
+																		<iconify-icon icon={_collection.icon} width="24" class="px-2 py-1 text-error-600"></iconify-icon>
+																	{/snippet}
+																	{#snippet content()}
+																		<div class="card p-4 preset-filled-secondary-500">
+																			<p>{_collection.name}</p>
+																		</div>
+																	{/snippet}
+																</Tooltip>
+																<p class="mr-auto text-center capitalize">{_collection.name}</p>
+															{:else}
+																<p class="text-xs capitalize">{_collection.name}</p>
+																<Tooltip positioning={{ placement: 'right' }} openDelay={200}>
+																	{#snippet trigger()}
+																		<iconify-icon icon={_collection.icon} width="24" class="text-error-600"></iconify-icon>
+																	{/snippet}
+																	{#snippet content()}
+																		<div class="card p-4 preset-filled-secondary-500">
+																			<p>{_collection.name}</p>
+																		</div>
+																	{/snippet}
+																</Tooltip>
+															{/if}
+														</div>
+													{/each}
+												{/if}
+											</div>
+										{/snippet}
+									</Accordion.Item>
+								{/each}
 							{/if}
-						{/snippet}
-					</AccordionItem>
-				{/each}
-			{:else}
-				<div class="p-4 text-center text-gray-500">No collections found</div>
-			{/if}
+						</div>
+					{/snippet}
+				</Accordion.Item>
+				<hr class="!border-t-2 !border-surface-500" />
+			{/each}
 		</Accordion>
 
 		<!-- Media Gallery Button -->

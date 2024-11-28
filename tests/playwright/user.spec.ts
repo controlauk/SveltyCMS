@@ -33,7 +33,7 @@ test('Delete Avatar', async ({ page }) => {
 	console.log('Delete Avatar test');
 	await page.goto('http://localhost:4173/user');
 	await page.locator('button:has-text("Edit Avatar")').click();
-	await page.locator('button.variant-filled-error').click(); // Assuming this is the delete button
+	await page.locator('button.preset-filled-error-500').click(); // Assuming this is the delete button
 	await page.waitForSelector('img[src*="default-avatar.png"]'); // Wait for the default avatar to reappear
 });
 

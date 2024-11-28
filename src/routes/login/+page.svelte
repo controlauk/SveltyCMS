@@ -30,6 +30,7 @@ Features:
 
 	// Props
 	const { data } = $props<{ data: PageData }>();
+
 	// State Management
 	const firstUserExists = $state(data.firstUserExists);
 	let active = $state<undefined | 0 | 1>(publicEnv.SEASONS || publicEnv.DEMO ? undefined : firstUserExists ? undefined : 1);

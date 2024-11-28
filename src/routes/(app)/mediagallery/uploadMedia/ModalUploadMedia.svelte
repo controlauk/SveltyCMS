@@ -155,7 +155,7 @@
 					<div class="card card-hover relative">
 						<!-- Delete buttons -->
 						<div class="absolute right-0 top-2 flex w-full justify-end px-2 opacity-0 hover:opacity-100">
-							<button onclick={() => handleDelete(file)} aria-label="Delete" class="variant-ghost-surface btn-icon">
+							<button onclick={() => handleDelete(file)} aria-label="Delete" class="preset-ghost-surface btn-icon">
 								<iconify-icon icon="material-symbols:delete" width="24" class="text-error-500"></iconify-icon>
 							</button>
 						</div>
@@ -192,7 +192,7 @@
 								<iconify-icon icon={generateThumbnail(file)} width="16" height="16"></iconify-icon>
 								<span>{formatMimeType(file.type)}</span>
 							</div>
-							<span class="variant-ghost-tertiary badge">{(file.size / 1024).toFixed(2)} KB</span>
+							<span class="preset-ghost-tertiary badge">{(file.size / 1024).toFixed(2)} KB</span>
 						</div>
 					</div>
 				{/each}
@@ -205,14 +205,14 @@
 					<input id="file-input" type="file" multiple onchange={handleFileInputChange} />
 				</div>
 				{#if duplicateWarning}
-					<p class="variant-filled-error rounded px-2 py-4">{duplicateWarning}</p>
+					<p class="rounded px-2 py-4 preset-filled-error-500">{duplicateWarning}</p>
 				{/if}
 			</div>
 		</form>
 
 		<footer class="modal-footer m-4 flex w-full justify-between {parent.regionFooter}">
-			<button class="variant-outline-secondary btn" onclick={handleCancel}>{m.button_cancel()}</button>
-			<button type="submit" form="upload-form" class="variant-filled-primary btn {parent.buttonPositive}">{m.button_save()}</button>
+			<button class="preset-outline-secondary btn" onclick={handleCancel}>{m.button_cancel()}</button>
+			<button type="submit" form="upload-form" class="btn preset-filled-primary-500 {parent.buttonPositive}">{m.button_save()}</button>
 		</footer>
 	</div>
 {/if}

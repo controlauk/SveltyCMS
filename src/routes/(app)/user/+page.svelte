@@ -30,11 +30,28 @@
 	import { Avatar } from '@skeletonlabs/skeleton';
 	import ModalEditAvatar from './components/ModalEditAvatar.svelte';
 	import ModalEditForm from './components/ModalEditForm.svelte';
-	import { getToastStore, getModalStore } from '@skeletonlabs/skeleton';
+	import { getModalStore } from '@skeletonlabs/skeleton';
 	import type { ModalComponent, ModalSettings } from '@skeletonlabs/skeleton';
+	import { getContext } from 'svelte';
+	import { type ToastContext } from '@skeletonlabs/skeleton-svelte';
 
-	const toastStore = getToastStore();
+	export const toast: ToastContext = getContext('toast');
 	const modalStore = getModalStore();
+
+	// Show corresponding Toast messages
+	function showToast(description: string, type: 'success' | 'info' | 'error') {
+		const types: Record<'success' | 'info' | 'error', 'success' | 'error' | 'info'> = {
+			success: 'success',
+			info: 'info',
+			error: 'error'
+		};
+		toast.create({
+			title: type.charAt(0).toUpperCase() + type.slice(1),
+			description,
+			type: types[type],
+			duration: 3000
+		});
+	}
 
 	// Props
 	let { data } = $props<{ data: PageData }>();
@@ -115,13 +132,7 @@
 					console.log('Response:', r);
 					const data = { user_id: user._id, newUserData: r };
 					const res = await axios.put('/api/user/updateUserAttributes', data);
-					const t = {
-						message: '<iconify-icon icon="mdi:check-outline" color="white" width="26" class="mr-1"></iconify-icon> User Data Updated',
-						background: 'gradient-tertiary',
-						timeout: 3000,
-						classes: 'border-1 !rounded-md'
-					};
-					toastStore.trigger(t);
+					showToast('User Data Updated', 'success');
 
 					if (res.status === 200) {
 						await invalidateAll();
@@ -147,13 +158,7 @@
 			response: async (r: { dataURL: string }) => {
 				if (r) {
 					avatarSrc.set(r.dataURL);
-					const t = {
-						message: '<iconify-icon icon="radix-icons:avatar" color="white" width="26" class="mr-1"></iconify-icon> Avatar Updated',
-						background: 'gradient-primary',
-						timeout: 3000,
-						classes: 'border-1 !rounded-md'
-					};
-					toastStore.trigger(t);
+					showToast('Avatar Updated', 'success');
 					await invalidateAll(); // Reload the page data to get the updated user object
 				}
 			}

@@ -235,7 +235,7 @@
 		</div>
 	</div>
 	<div class="mt-4 flex justify-around gap-4">
-		<button onclick={resetMosaic} class="variant-filled-error btn">Reset</button>
-		<button onclick={applyFinalMosaic} class="variant-filled-primary btn">Apply</button>
+		<button onclick={resetMosaic} class="btn preset-filled-error-500">Reset</button>
+		<button onclick={applyFinalMosaic} class="btn preset-filled-primary-500">Apply</button>
 	</div>
 </div>

@@ -19,10 +19,31 @@
 
 	// Skeleton
 	import { popup } from '@skeletonlabs/skeleton';
-	import type { PopupSettings } from '@skeletonlabs/skeleton';
-	import { ListBox, ListBoxItem } from '@skeletonlabs/skeleton';
-	import { getToastStore, getModalStore } from '@skeletonlabs/skeleton';
-	import type { ModalSettings, ModalComponent } from '@skeletonlabs/skeleton';
+	import { getModalStore } from '@skeletonlabs/skeleton';
+	import type { ModalComponent, ModalSettings } from '@skeletonlabs/skeleton';
+
+	import { getContext } from 'svelte';
+	import { type ToastContext } from '@skeletonlabs/skeleton-svelte';
+
+	export const toast: ToastContext = getContext('toast');
+	const modalStore = getModalStore();
+
+	// Show corresponding Toast messages
+	function showToast(description: string, type: 'success' | 'info' | 'error') {
+		const types: Record<'success' | 'info' | 'error', 'success' | 'error' | 'info'> = {
+			success: 'success',
+			info: 'info',
+			error: 'error'
+		};
+		toast.create({
+			title: type.charAt(0).toUpperCase() + type.slice(1),
+			description,
+			type: types[type],
+			duration: 3000
+		});
+	}
+
+	// Skeleton
 	import ModalEditForm from './ModalEditForm.svelte';
 	import ModalEditToken from './ModalEditToken.svelte';
 
@@ -56,9 +77,6 @@
 	// Derived values
 	let isDisabled = $derived(selectedRows.length === 0);
 	let isMultipleSelected = $derived(selectedRows.length > 1);
-
-	const modalStore = getModalStore();
-	const toastStore = getToastStore();
 
 	const Combobox: PopupSettings = {
 		event: 'click',
@@ -118,23 +136,14 @@
 		user_id?: string;
 	}
 
-	function showToast(message: string, isError = false, background = 'gradient-primary') {
-		toastStore.trigger({
-			message: `<iconify-icon icon="${isError ? 'mdi:alert' : 'mdi:check-outline'}" color="white" width="26" class="mr-1"></iconify-icon> ${message}`,
-			background: isError ? 'gradient-error' : background,
-			timeout: 3000,
-			classes: 'border-1 !rounded-md'
-		});
-	}
-
 	async function handleAction(action: ActionType) {
 		if (isDisabled) {
-			showToast(`Please select ${type}(s) to ${action}`, true);
+			showToast(`Please select ${type}(s) to ${action}`, 'error');
 			return;
 		}
 
 		if (action === 'edit' && isMultipleSelected) {
-			showToast(`Please select only one ${type} to edit`, true);
+			showToast(`Please select only one ${type} to edit`, 'error');
 			return;
 		}
 
@@ -188,15 +197,15 @@
 					});
 
 					if (res.ok) {
-						showToast(config.toastMessage(), false, config.toastBackground);
+						showToast(config.toastMessage(), 'success');
 						await invalidateAll();
 					} else {
 						const data = await res.json();
-						showToast(data.message || `Failed to ${action} ${type}`, true);
+						showToast(data.message || `Failed to ${action} ${type}`, 'error');
 					}
 				} catch (error) {
 					console.error(`Error ${action}ing ${type}:`, error);
-					showToast(`Failed to ${action} ${type}`, true);
+					showToast(`Failed to ${action} ${type}`, 'error');
 				}
 			}
 		};
@@ -243,14 +252,14 @@
 
 <!-- Dropdown/Listbox -->
 <div class="overflow-hiddens card z-10 w-48 rounded-sm bg-surface-500 text-white" data-popup="Combobox" role="menu" aria-label="Available actions">
-	<ListBox rounded="rounded-sm" active="variant-filled-primary" hover="hover:bg-surface-300" class="divide-y">
+	<ListBox rounded="rounded-sm" active="preset-filled-primary-500" hover="hover:bg-surface-300" class="divide-y">
 		{#each Object.entries(actionConfig) as [action, config]}
 			{#if action !== listboxValue}
 				<ListBoxItem
 					bind:group={listboxValue}
 					name="medium"
 					value={action}
-					active="variant-filled-primary"
+					active="preset-filled-primary-500"
 					hover="gradient-primary-hover"
 					role="menuitem"
 				>

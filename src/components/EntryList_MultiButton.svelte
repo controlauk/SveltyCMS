@@ -34,7 +34,6 @@
 	import { getModalStore, type ModalComponent, type ModalSettings } from '@skeletonlabs/skeleton';
 
 	type ActionType = 'create' | 'publish' | 'unpublish' | 'schedule' | 'clone' | 'delete' | 'test';
-	type ModifyType = 'published' | 'unpublished' | 'scheduled' | 'cloned' | 'deleted' | 'testing';
 
 	interface Props {
 		isCollectionEmpty?: boolean;
@@ -166,7 +165,7 @@
 
 <!-- Multibutton group-->
 <div class="relative z-20 mt-1 font-medium text-white">
-	<div class="variant-filled-token btn-group flex overflow-hidden rounded-l-full rounded-r-md rtl:rounded rtl:rounded-r-full">
+	<div class="preset-filled-secondary btn-group flex overflow-hidden rounded-l-full rounded-r-md rtl:rounded rtl:rounded-r-full">
 		<!-- Left button -->
 		<button type="button" class={`w-[60px] md:w-auto rtl:rotate-180 ${buttonClass} rounded-l-full`} onclick={handleButtonClick}>
 			<span class="grid grid-cols-[24px_auto] items-center gap-2 rtl:rotate-180">

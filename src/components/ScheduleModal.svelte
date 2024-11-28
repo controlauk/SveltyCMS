@@ -17,7 +17,7 @@ Ensure that the necessary stores and utility functions are available.
 <script lang="ts">
 	import { page } from '$app/stores';
 	import { modifyEntry, selectedEntries, collectionValue, collection } from '@root/src/stores/collectionStore.svelte';
-	import { saveFormData } from '../utils/data';
+	import { saveFormData } from '@utils/data';
 
 	// Auth
 	import type { User } from '@src/auth/types';
@@ -26,24 +26,20 @@ Ensure that the necessary stores and utility functions are available.
 	import * as m from '@src/paraglide/messages';
 
 	// Skeleton
-	import { getModalStore } from '@skeletonlabs/skeleton';
+	import { Modal } from '@skeletonlabs/skeleton-svelte';
+	let openState = $state(false);
 
-	const modalStore = getModalStore();
-
-	// Props
-	interface Props {
-		/** Exposes parent props to this component. */
-		parent: any;
+	function modalClose() {
+		openState = false;
+		scheduleDate = '';
+		errorMessage = '';
 	}
 
-	let { parent }: Props = $props();
-
-	const user: User = $page.data.user;
-
+	// Types
 	type ActionType = 'published' | 'unpublished' | 'deleted' | 'scheduled' | 'cloned' | 'testing';
 
 	let scheduleDate: string = $state('');
-	let action: ActionType = $state(($modalStore[0]?.meta?.initialAction as ActionType) || 'scheduled');
+	let action: ActionType = $state('scheduled');
 	let errorMessage: string = $state('');
 
 	const actionOptions: Array<{ value: ActionType; label: string }> = [
@@ -59,115 +55,94 @@ Ensure that the necessary stores and utility functions are available.
 			errorMessage = 'Please select a date and time';
 			return false;
 		}
-		if (new Date(scheduleDate) < new Date()) {
-			errorMessage = 'Scheduled time must be in the future';
+
+		const scheduledDate = new Date(scheduleDate);
+		if (scheduledDate < new Date()) {
+			errorMessage = 'Schedule date must be in the future';
 			return false;
 		}
+
 		errorMessage = '';
 		return true;
 	}
 
-	async function onFormSubmit(): Promise<void> {
+	async function handleSchedule(): Promise<void> {
 		if (!validateForm()) return;
 
 		try {
-			// Update the modal response with the schedule data
-			if ($modalStore[0].response) {
-				$modalStore[0].response({
-					date: scheduleDate,
-					action: 'schedule'
-				});
-			}
-
-			// If we have selected entries, update them
 			if ($selectedEntries && $selectedEntries.length > 0) {
 				const scheduledTime = new Date(scheduleDate).getTime();
 
-				for (const entryId of $selectedEntries) {
-					const entry = collectionValue.value[entryId];
-					if (!entry) continue;
-
-					const updateData = {
-						_id: entryId,
-						_scheduled: scheduledTime,
-						_scheduledAction: action,
-						status: 'scheduled'
+				for (const entry of $selectedEntries) {
+					const updatedEntry = {
+						...entry,
+						scheduledAction: {
+							action,
+							date: scheduleDate
+						}
 					};
 
-					// Create a FormData object to match the expected type
-					const formData = new FormData();
-					Object.entries(updateData).forEach(([key, value]) => {
-						formData.append(key, value.toString());
-					});
-
-					await saveFormData({
-						data: formData,
-						_collection: collection.value,
-						_mode: 'edit',
-						id: entryId,
-						user: user
-					});
+					await modifyEntry(updatedEntry);
 				}
 
+				$selectedEntries = [];
+			} else {
 				$modifyEntry(action);
 			}
 
-			modalStore.close();
+			modalClose();
 		} catch (error) {
 			console.error('Error scheduling entries:', error);
 			errorMessage = 'An error occurred while scheduling. Please try again.';
 		}
 	}
-
-	// Base Classes
-	const cBase = 'card p-4 w-modal shadow-xl space-y-4 bg-white';
-	const cHeader = 'text-2xl font-bold';
-	const cForm = 'border border-surface-500 p-4 space-y-4 rounded-container-token';
 </script>
 
-{#if $modalStore[0]}
-	<div class="modal-schedule {cBase}" role="dialog" aria-labelledby="schedule-modal-title">
-		<header class={`text-center text-primary-500 ${cHeader}`}>
-			<h2 id="schedule-modal-title">{$modalStore[0]?.title ?? 'Schedule Action'}</h2>
+<Modal
+	bind:open={openState}
+	triggerBase="card p-4 w-modal shadow-xl space-y-4 bg-white"
+	contentBase="border border-surface-500 p-4 space-y-4 rounded-container-token"
+	backdropClasses="backdrop-blur-sm"
+>
+	{#snippet trigger()}
+		<button class="variant-filled btn">Schedule Action</button>
+	{/snippet}
+
+	{#snippet content()}
+		<header class="flex items-center justify-between">
+			<h2 class="h2">Schedule Action</h2>
 		</header>
-		<article class="text-center text-sm">
-			{$modalStore[0]?.body ?? 'Select a date, time, and action to schedule for the selected entries.'}
-		</article>
 
-		<form class="modal-form {cForm}" onsubmit={onFormSubmit}>
-			<label class="label">
-				<span>Schedule Date and Time</span>
-				<input
-					type="datetime-local"
-					bind:value={scheduleDate}
-					class="input"
-					required
-					min={new Date().toISOString().slice(0, 16)}
-					aria-describedby="schedule-date-error"
-				/>
-			</label>
-
-			<label class="label">
-				<span>Action Type</span>
-				<select bind:value={action} class="select" required>
+		<article class="space-y-4">
+			<div class="form-field">
+				<label for="action">Action</label>
+				<select id="action" class="select" bind:value={action}>
 					{#each actionOptions as option}
 						<option value={option.value}>{option.label}</option>
 					{/each}
 				</select>
-			</label>
+			</div>
+
+			<div class="form-field">
+				<label for="schedule-date">Schedule Date</label>
+				<input
+					id="schedule-date"
+					type="datetime-local"
+					class="input"
+					bind:value={scheduleDate}
+					min={new Date().toISOString().slice(0, 16)}
+					aria-describedby="schedule-date-error"
+				/>
+			</div>
 
 			{#if errorMessage}
-				<p class="text-error-500" id="schedule-date-error" role="alert">{errorMessage}</p>
+				<div class="alert variant-filled-error" id="schedule-date-error" role="alert">{errorMessage}</div>
 			{/if}
-		</form>
+		</article>
 
-		<footer class="modal-footer {parent.regionFooter}">
-			<button type="button" class="btn {parent?.buttonNeutral}" onclick={parent?.onClose} aria-label="Cancel scheduling">
-				{m.button_cancel()}
-			</button>
-			<button type="submit" class="btn {parent?.buttonPositive}" onclick={onFormSubmit} disabled={!isFormValid} aria-label="Save schedule">
-				{m.button_save()}
-			</button>
+		<footer class="flex justify-end gap-4">
+			<button type="button" class="variant-soft btn" onclick={modalClose}>Cancel</button>
+			<button type="button" class="variant-filled-primary btn" onclick={handleSchedule} disabled={!isFormValid}> Schedule </button>
 		</footer>
-	</div>
-{/if}
+	{/snippet}
+</Modal>

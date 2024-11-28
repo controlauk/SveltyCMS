@@ -24,17 +24,15 @@
 	// Importing the Paraglide SvelteKit component for animations
 	import ParaglideSvelteKit from '@components/ParaglideSvelteKit.svelte';
 
-	// category config store
+	// Category
 	import { categories } from '@root/src/stores/collectionStore.svelte';
+	import { categoryConfig } from '@src/collections/categories';
+
+	// Skeleton
+	import { ToastProvider } from '@skeletonlabs/skeleton-svelte';
 
 	// Importing Tailwind CSS styles
 	import '../app.postcss';
-
-	// Initializing Skeleton stores
-	import { initializeStores } from '@skeletonlabs/skeleton';
-	import { categoryConfig } from '@src/collections/categories';
-
-	initializeStores();
 
 	// Default SEO variables for the website's title and description
 	const defaultTitle = `${publicEnv.SITE_NAME} - The Ultimate Headless CMS Powered by SvelteKit`;
@@ -79,5 +77,9 @@
 </svelte:head>
 
 <ParaglideSvelteKit>
-	{@render children?.()}
+	<ToastProvider>
+		{#if children}
+			{@render children()}
+		{/if}
+	</ToastProvider>
 </ParaglideSvelteKit>

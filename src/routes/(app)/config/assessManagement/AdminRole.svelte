@@ -27,9 +27,12 @@ It provides functionality to:
 
 	// Components
 	import Loading from '@components/Loading.svelte';
-	import { getToastStore } from '@skeletonlabs/skeleton';
 
-	const toastStore = getToastStore();
+	// Skeleton
+	import { getContext } from 'svelte';
+	import { type ToastContext } from '@skeletonlabs/skeleton-svelte';
+
+	export const toast: ToastContext = getContext('toast');
 
 	let { roleData, setRoleData } = $props();
 
@@ -83,17 +86,17 @@ It provides functionality to:
 	};
 
 	// Show corresponding Toast messages
-	function showToast(message, type) {
-		const backgrounds = {
-			success: 'variant-filled-primary',
-			info: 'variant-filled-tertiary',
-			error: 'variant-filled-error'
+	function showToast(description: string, type: 'success' | 'info' | 'error') {
+		const types: Record<'success' | 'info' | 'error', 'success' | 'error' | 'info'> = {
+			success: 'success',
+			info: 'info',
+			error: 'error'
 		};
-		toastStore.trigger({
-			message: message,
-			background: backgrounds[type],
-			timeout: 3000,
-			classes: 'border-1 !rounded-md'
+		toast.create({
+			title: type.charAt(0).toUpperCase() + type.slice(1),
+			description,
+			type: types[type],
+			duration: 3000
 		});
 	}
 
@@ -171,10 +174,10 @@ It provides functionality to:
 			</p>
 			<div class="mt-4 flex justify-between">
 				<!-- cancel -->
-				<button onclick={cancelChanges} class="variant-filled-secondary btn"> Cancel </button>
+				<button onclick={cancelChanges} class="btn preset-filled-secondary-500"> Cancel </button>
 
 				<!-- Save -->
-				<button onclick={saveAdminRole} class="variant-filled-tertiary btn" disabled={$isSaving}>
+				<button onclick={saveAdminRole} class="btn preset-filled-tertiary-500" disabled={$isSaving}>
 					{#if $isSaving}
 						Saving...
 					{:else}

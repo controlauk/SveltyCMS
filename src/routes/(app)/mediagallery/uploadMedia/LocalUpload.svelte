@@ -18,17 +18,19 @@
 -->
 
 <script lang="ts">
-	import { getModalStore, getToastStore } from '@skeletonlabs/skeleton';
+	import { getModalStore } from '@skeletonlabs/skeleton';
 	import type { ModalSettings, ModalComponent } from '@skeletonlabs/skeleton';
 	import ModalUploadMedia from './ModalUploadMedia.svelte';
 	import { goto } from '$app/navigation';
+	import { getContext } from 'svelte';
+	import { type ToastContext } from '@skeletonlabs/skeleton-svelte';
 
 	let files: File[] = [];
 	let input: HTMLInputElement;
 	let dropZone: HTMLDivElement;
 
+	export const toast: ToastContext = getContext('toast');
 	const modalStore = getModalStore();
-	const toastStore = getToastStore();
 
 	function modalAddMedia(): void {
 		const modalComponent: ModalComponent = {
@@ -100,10 +102,7 @@
 
 	async function uploadFiles() {
 		if (files.length === 0) {
-			toastStore.trigger({
-				message: 'No files selected for upload',
-				background: 'variant-filled-warning'
-			});
+			showToast('No files selected for upload', 'error');
 			return;
 		}
 
@@ -126,10 +125,7 @@
 			const result = await response.json();
 
 			if (result.success) {
-				toastStore.trigger({
-					message: 'Files uploaded successfully',
-					background: 'variant-filled-success'
-				});
+				showToast('Files uploaded successfully', 'success');
 				files = []; // Clear the files array after successful upload
 
 				// Navigate back to media gallery after successful upload
@@ -139,11 +135,23 @@
 			}
 		} catch (error) {
 			console.error('Error uploading files:', error);
-			toastStore.trigger({
-				message: 'Error uploading files: ' + (error instanceof Error ? error.message : 'Unknown error'),
-				background: 'variant-filled-error'
-			});
+			showToast('Error uploading files: ' + (error instanceof Error ? error.message : 'Unknown error'), 'error');
 		}
+	}
+
+	// Show corresponding Toast messages
+	function showToast(description: string, type: 'success' | 'info' | 'error') {
+		const types: Record<'success' | 'info' | 'error', 'success' | 'error' | 'info'> = {
+			success: 'success',
+			info: 'info',
+			error: 'error'
+		};
+		toast.create({
+			title: type.charAt(0).toUpperCase() + type.slice(1),
+			description,
+			type: types[type],
+			duration: 3000
+		});
 	}
 </script>
 
@@ -168,7 +176,7 @@
 
 			<p class="text-sm opacity-75">Multiple files allowed</p>
 
-			<button onclick={() => input.click()} class="variant-filled-tertiary btn mt-3 dark:variant-filled-primary"> Browse Files </button>
+			<button onclick={() => input.click()} class="btn mt-3 preset-filled-tertiary-500 dark:preset-filled-primary-500"> Browse Files </button>
 
 			<!-- File Size Limit -->
 			<p class="mt-2 text-sm text-tertiary-500 dark:text-primary-500">Max File Size: XX MB</p>

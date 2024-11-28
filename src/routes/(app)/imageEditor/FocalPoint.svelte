@@ -176,7 +176,7 @@
 		</div>
 	</div>
 	<div class="mt-4 flex justify-around gap-4">
-		<button onclick={removeFocalPoint} class="variant-filled-error btn"> Remove Focal Point </button>
-		<button onclick={resetFocalPoint} class="variant-filled-primary btn"> Reset Focal Point </button>
+		<button onclick={removeFocalPoint} class="btn preset-filled-error-500"> Remove Focal Point </button>
+		<button onclick={resetFocalPoint} class="btn preset-filled-primary-500"> Reset Focal Point </button>
 	</div>
 </div>

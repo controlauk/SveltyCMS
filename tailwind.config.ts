@@ -8,7 +8,6 @@
  * - Configuration of the Skeleton plugin with a custom theme (SveltyCMSTheme)
  */
 
-import { join } from 'path';
 import type { Config } from 'tailwindcss';
 
 // Import Tailwind plugins
@@ -16,19 +15,17 @@ import forms from '@tailwindcss/forms';
 import typography from '@tailwindcss/typography';
 
 // Import the Skeleton plugin
-import { skeleton } from '@skeletonlabs/tw-plugin';
-// Import Custom Theme
-import { SveltyCMSTheme } from './src/themes/SveltyCMS/SveltyCMSTheme';
+import { skeleton, contentPath } from '@skeletonlabs/skeleton/plugin';
 
-/** @type {import('tailwindcss').Config} */
-module.exports = {
-	// Opt for dark mode to be handled via the class method
+// Import Custom Theme
+import SveltyCMSTheme from './src/themes/SveltyCMS/SveltyCMSTheme';
+
+export default {
 	darkMode: 'class',
 
 	content: [
-		'./src/**/*.{html,js,svelte,ts}',
-		// Append Path for the Skeleton NPM package and files:
-		join(require.resolve('@skeletonlabs/skeleton'), '../**/*.{html,js,svelte,ts}')
+        './src/**/*.{html,js,svelte,ts}',
+        contentPath(import.meta.url, 'svelte')
 	],
 
 	theme: {
@@ -56,12 +53,12 @@ module.exports = {
 	plugins: [
 		forms,
 		typography,
-		// Append the Skeleton plugin (after other plugins)
-
+		// The Skeleton plugin
 		skeleton({
-			themes: {
-				custom: [SveltyCMSTheme]
-			}
+			themes: [
+				// Add custom theme to the array
+				SveltyCMSTheme
+			]
 		})
 	]
 } satisfies Config;
